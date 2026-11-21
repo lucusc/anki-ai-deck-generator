@@ -20,6 +20,10 @@ an external rendering/OCR executable is used. License sources were checked on
 2026-11-21. The test-only cryptography dependency generates original AES fixtures;
 runtime PDF extraction does not need it.
 
+The standalone parser test manifest pins pytest 9.0.3 and cryptography 50.0.2,
+matching the reviewed dependency-remediated test environment. These are test
+dependencies, not a new runtime decryption capability.
+
 The backend manifest includes the scoped runtime dependencies, and its default
 test runner includes `extraction/tests`. Root tooling changes were explicitly
 authorized for the self-contained #9 PR after the bootstrap merged.
