@@ -18,3 +18,10 @@
 Return committed implementation, evidence and blockers. No nested sessions,
 unassigned issues, GitHub writes, paid services, deployments or PR operations.
 Parent exclusively reconciles root documentation, decisions and backlog.
+
+Dispatch identity appended before execution: session
+`7cff93fc-c604-45b1-a67d-7fdb0ec98b89`, initial branch
+`lucusc-reimagined-lamp`, base commit
+`69e19f5692438c132b7c06aa3cdd4bf304a89608`. Child will report any app-managed
+branch rename. TEAM_ROOT and WORKTREE_PATH are the child's own checkout;
+STATE_BACKEND is local.

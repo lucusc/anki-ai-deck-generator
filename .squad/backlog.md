@@ -40,12 +40,12 @@ on the listed prerequisites; completion requires the full issue acceptance.
 
 | Issue | Title | Direct prerequisites | Route | Wave | State | Active claim |
 |-------|-------|----------------------|-------|------|-------|--------------|
-| #1 | Create Anki add-on project structure | None | addon | 0 | assigned | addon foundation; session/branch appended to dispatch log |
+| #1 | Create Anki add-on project structure | None | addon | 0 | assigned | `0d5353d4-095a-47d1-a62b-2c0d3193bb68`; `lucusc-congenial-umbrella` (initial branch) |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
 | #3 | Implement deck selector | #1 | addon | 1 | blocked | unclaimed |
 | #4 | Implement audience selector | #1 | addon | 1 | blocked | unclaimed |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
-| #6 | Create Azure Function project | None | functions | 0 | assigned | functions foundation; session/branch appended to dispatch log |
+| #6 | Create Azure Function project | None | functions | 0 | assigned | `7cff93fc-c604-45b1-a67d-7fdb0ec98b89`; `lucusc-reimagined-lamp` (initial branch) |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
 | #8 | Implement card generation endpoint | #7, #9, #16, #17 | functions | 6 | blocked | unclaimed |
 | #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | blocked | unclaimed |
