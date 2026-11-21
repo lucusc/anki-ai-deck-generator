@@ -11,6 +11,7 @@ import pytest
 
 import auth
 from function_app import app, ProcessingUnavailable
+from storage.retention import RetentionUnavailable
 
 
 @pytest.fixture(scope="module")
@@ -203,7 +204,7 @@ def test_host_discovers_only_scoped_routes_and_queue_binding(functions):
         name: json.loads(function.get_function_json())["bindings"]
         for name, function in functions.items()
     }
-    assert set(routes) == {"health", "auth_check", "generation_worker"}
+    assert set(routes) == {"health", "auth_check", "generation_worker", "retention_worker"}
     for name, path in [("health", "health"), ("auth_check", "v1/auth-check")]:
         trigger = next(binding for binding in routes[name] if binding["type"] == "httpTrigger")
         assert trigger["route"] == path
@@ -216,6 +217,35 @@ def test_host_discovers_only_scoped_routes_and_queue_binding(functions):
     assert trigger["type"] == "queueTrigger"
     assert trigger["queueName"] == "generation-jobs"
     assert trigger["connection"] == "AzureWebJobsStorage"
+    trigger = routes["retention_worker"][0]
+    assert trigger["type"] == "timerTrigger"
+    assert trigger["schedule"] == "%RETENTION_SCHEDULE%"
+    assert trigger["runOnStartup"] is False
+    assert trigger["useMonitor"] is True
+
+
+def test_retention_binding_calls_real_integration_and_surfaces_failure(functions, monkeypatch, caplog):
+    import function_app
+    calls = []
+    monkeypatch.setattr(function_app, "run_configured_sweep", lambda: calls.append("sweep"))
+    worker = functions["retention_worker"].get_user_function()
+    worker(SimpleNamespace(past_due=False))
+    assert calls == ["sweep"]
+
+    def fail():
+        raise RetentionUnavailable("retention_sweep_failed")
+
+    monkeypatch.setattr(function_app, "run_configured_sweep", fail)
+    with pytest.raises(RetentionUnavailable):
+        worker(SimpleNamespace(past_due=True))
+    assert "retention_unavailable" in caplog.text
+
+
+def test_retention_template_is_inert_and_has_no_inventory_or_credentials():
+    settings = json.loads((Path(__file__).parents[1] / "local.settings.json.example").read_text())["Values"]
+    assert settings["AzureWebJobs.retention_worker.Disabled"] == "true"
+    assert json.loads(settings["RETENTION_USERS"]) == []
+    assert settings["RETENTION_SCHEDULE"] == "0 */5 * * * *"
 
 
 def test_host_limits_queue_retry_and_execution():

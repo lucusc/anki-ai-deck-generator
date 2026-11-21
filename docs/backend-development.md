@@ -164,3 +164,24 @@ not run. No Azure resources, region/runtime subscription check, real identity
 provider or cloud smoke test were available or authorized. A future authorized
 smoke test must confirm host startup, the two HTTP responses above, a valid API
 token, synthetic queue retries/poison placement, and content-free diagnostics.
+
+## Temporary storage and retention integration (#18)
+
+[Blob storage](blob-storage.md) adds private user-scoped SDK operations and a
+retention-only timer without changing health, authentication or the deliberately
+unavailable generation worker. There are still no upload/job HTTP endpoints.
+The existing scoped storage requirements feed the backend dependency include.
+
+`retention_worker` binds to `%RETENTION_SCHEDULE%`, with host monitoring and no
+startup execution. The local example sets `AzureWebJobs.retention_worker.Disabled`
+to `true`; empty inventory/configuration fails explicitly if invoked. No timer
+or service was enabled by this implementation. Operator configuration includes
+the complete bounded `RETENTION_USERS` inventory and Table/Blob/ARM settings
+documented in the Blob contract. SDK policy reads require scoped management
+read rights as well as Blob/Table data rights; they never provision resources.
+
+The timer performs bounded conditional physical cleanup, persists continuation
+and raises content-free failure for outages, pending drain or missed cycles.
+Provisioned monitoring, actual host/managed identity/policy validation and live
+physical-retention evidence remain release gates. The former foundation-only
+paragraphs above describe #6, not a certification that these new gates passed.

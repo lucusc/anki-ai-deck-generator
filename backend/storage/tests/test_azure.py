@@ -4,6 +4,7 @@ import time
 from azure.core.credentials import AccessToken
 from azure.core.exceptions import HttpResponseError, ResourceNotFoundError, ResourceModifiedError
 from azure.core.pipeline.transport import HttpResponse, HttpTransport
+from azure.core.utils import case_insensitive_dict
 from azure.data.tables import TableClient
 import pytest
 
@@ -19,7 +20,7 @@ class Response(HttpResponse):
     def __init__(self, request, status, body, headers):
         super().__init__(request, None)
         self.status_code = status
-        self.headers = headers
+        self.headers = case_insensitive_dict(headers)
         self.reason = "Synthetic"
         self._body = body.encode()
         self.content_type = headers.get("Content-Type")
@@ -28,7 +29,13 @@ class Response(HttpResponse):
         return self._body
 
     def stream_download(self, pipeline, **kwargs):
-        yield self._body
+        class Stream:
+            content_length = len(self._body)
+
+            def __iter__(stream):
+                yield self._body
+
+        return Stream()
 
 
 class Transport(HttpTransport):
