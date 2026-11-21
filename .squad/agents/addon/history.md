@@ -49,3 +49,50 @@
   running creation can commit after close and must not be silently deleted.
 - Contract proposal: addon-3-stable-deck-contract.md; docs/deck-selector.md records
   API evidence and honest desktop/provider/undo gaps. Parent owns reconciliation.
+
+### 2026-11-21 — Issue #25 note model mapper
+
+- Own checkout/TEAM_ROOT, STATE_BACKEND=local; required parent identity integrated
+  as 047a559. App-renamed branch lucusc-note-model-mapper. Per revised user PR
+  workflow, merged origin/main bootstrap 2225894 before publication.
+- Implementation c1ce981 defines strict schema_version=1 generated notes and
+  dedicated Basic/reversed/Cloze managed models, preserving customized built-ins
+  and failing on incompatible managed field/template/CSS/deck overrides.
+- Sanitizer must account for Anki non-HTML syntax too: generated LaTeX/sound
+  markers fail; source/provenance escape brackets/braces as well as HTML.
+  Cloze accepts documented c1-c99 nonnested tokens after entity decoding.
+- Return unsaved note, revalidated numeric deck identity and optional model
+  changes. Creation defaults off, explicit boolean only; no insertion, flush,
+  approval, dedupe lookup or acknowledgement. Identity lives in Import ID field,
+  becoming durable only when later approved insertion commits it.
+- 16 focused tests and all 61 add-on tests pass. Source mutations protect
+  identity, attribute stripping and model customization gates. Packaging
+  includes all mapper modules and excludes tests.
+- docs/note-payload.md and addon-25-note-payload-v1.md are a producer contract
+  proposal for parent/lead acceptance, not an implemented generation endpoint.
+  Anki 25.09/26.09.4 public APIs inspected; real desktop saved rendering/browser
+  views/restart/undo/persistence/Qt and backend/import integration remain open.
+- Post-publication parent main sync: audience PR #50 main 04e139a merged as
+  d416f46, preserving both histories. All 70 integrated add-on tests pass;
+  PR #52 retains non-closing wording and unchanged acceptance gaps.
+### 2026-11-21 — Issue #4 audience selector
+
+- Own checkout/TEAM_ROOT with STATE_BACKEND=local; dispatch identity 53116c8
+  integrated as 047a559 before edits. Branch: lucusc-audience-selector.
+- Added all five exact accepted product options to the existing single
+  modeless Tools workflow, with no initial default, explicit read-only label,
+  profile-local reopen state and profile-close reset. Audience changes never
+  touch destination selection, credentials, collection or network.
+- Frozen AudienceSettings is an audience-only projection, not the full future
+  job schema. Capture detaches from mutable mappings and later combo choices.
+  Invalid reselection clears the live choice instead of reusing old settings.
+  Server validator rejects missing/unknown/non-string values with fixed errors.
+- Client/server contracts are independent distributable modules with tested
+  golden/round-trip/error parity; never import the add-on entry point in backend.
+  OAuth/API token audience remains separate from study audience settings.
+- 54 add-on and 100 backend/storage regressions passed, including packaged
+  Anki target doubles and source mutations for defaults/validation/immutability.
+  Actual Anki/Qt/provider and job/review endpoint integration remain open.
+- docs/audience-settings.md and addon-4-audience-settings.md describe the exact
+  #7 validator caller, #8 persisted snapshot and #5 review label obligations.
+  Parent owns full schema/state acceptance and serial PR review/merge.

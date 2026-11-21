@@ -1,15 +1,20 @@
 from aqt.operations import QueryOp
 from aqt.qt import QDialog, QLabel, QPushButton, Qt, QVBoxLayout, qconnect
 
+from ..models.audience import AudienceSelection
 from ..models.auth import AddonError, OAuthConfig
 from ..models.deck import DeckSelection
 from ..services.oauth import OAuthSession
 from ..services.privacy import event
+from .audience import AudienceSelector
 from .decks import DeckSelector
 
 
 class SignInDialog(QDialog):
-    def __init__(self, mw, config: OAuthConfig, profile: str, selection: DeckSelection):
+    def __init__(
+        self, mw, config: OAuthConfig, profile: str,
+        selection: DeckSelection, audience_selection: AudienceSelection,
+    ):
         super().__init__(mw)
         self.setWindowTitle("Anki AI Deck Generator")
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
@@ -40,12 +45,18 @@ class SignInDialog(QDialog):
         qconnect(self.resume.clicked, lambda: self.run(self._resume, "signed_in"))
         qconnect(self.signout.clicked, lambda: self.run(self.session.sign_out, "signed_out_ok"))
         qconnect(self.cancel_button.clicked, self.reject)
-        self.decks = DeckSelector(self, selection, lambda busy: self._buttons(not busy))
+        self.audience = AudienceSelector(self, audience_selection)
+        layout.addWidget(self.audience)
+        self.decks = DeckSelector(self, selection, self._deck_busy)
         layout.addWidget(self.decks)
         self.decks.refresh()
 
     def _resume(self) -> None:
         self.session.access_token()
+
+    def _deck_busy(self, busy: bool):
+        self._buttons(not busy)
+        self.audience.set_available(not busy)
 
     def run(self, operation, success_code: str) -> None:
         if self.busy or self.decks.busy or not self.active:
@@ -53,6 +64,7 @@ class SignInDialog(QDialog):
         self.busy = True
         self._buttons(False)
         self.decks.set_available(False)
+        self.audience.set_available(False)
         self.status.setText("Working... Complete sign-in in your browser, or cancel.")
 
         def success(result):
@@ -61,6 +73,7 @@ class SignInDialog(QDialog):
             self.busy = False
             self._buttons(True)
             self.decks.set_available(True)
+            self.audience.set_available(True)
             event(success_code)
             self.status.setText(
                 "Signed in. No documents have been uploaded."
@@ -76,6 +89,7 @@ class SignInDialog(QDialog):
             self.busy = False
             self._buttons(True)
             self.decks.set_available(True)
+            self.audience.set_available(True)
             self.status.setText(str(safe))
 
         try:
@@ -95,11 +109,13 @@ class SignInDialog(QDialog):
     def reject(self) -> None:
         self.active = False
         self.decks.close_selector()
+        self.audience.close_selector()
         self.session.close()
         super().reject()
 
     def closeEvent(self, event):
         self.active = False
         self.decks.close_selector()
+        self.audience.close_selector()
         self.session.close()
         super().closeEvent(event)
