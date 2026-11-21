@@ -23,6 +23,8 @@ This repository contains requirements, Squad coordination, and initial Anki add-
 - [Audience settings and pending integration](docs/audience-settings.md)
 - [Versioned note payload and mapper](docs/note-payload.md)
 - [Bounded native PDF extraction](docs/pdf-extraction.md)
+- [UTF-8 TXT and Markdown extraction](docs/text-extraction.md)
+- [Approved Basic-import helper and pending workflow](docs/basic-notes.md)
 - [Table Storage contract and retention gaps](docs/table-storage.md)
 - [Private temporary Blob storage and recovery gates](docs/blob-storage.md)
 - [Implementation issues](https://github.com/lucusc/anki-ai-deck-generator/issues)
