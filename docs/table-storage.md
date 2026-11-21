@@ -189,3 +189,30 @@ SDK against an offline HTTP transport, checking request serialization, concrete
 and service 404/412/503 errors. These are **not Azure/emulator integration tests**.
 No Azurite/Table emulator, Functions host, managed identity authorization,
 live Azure batch/retention/deletion smoke or deployment has been verified.
+
+## #18 integration appendix
+
+The [private Blob contract](blob-storage.md) now implements the derived locator,
+adds fenced `b:{deck}:{job}:{class}:{artifact}` metadata rows and a bounded
+content-free `r:retention` cursor in this same physical Table. Retention-only
+job event timestamps capture processing completion, failure and committed Anki
+acknowledgement without extending operational expiry.
+
+The production SDK now exposes a bounded page/continuation API. `purge_entity()`
+is one conditional physical purge with at most one hour of cleanup lead.
+`finish_deck_deletion()` refuses outstanding artifact rows and has a bounded
+child limit, returning `False` for another pass. The earlier schema-only examples
+must not treat a returned pending result as complete.
+
+The inert-by-default retention timer supplies bounded named-user inventory
+execution rather than a whole-account scan. Leased conditional content PUTs,
+read-only SAS and physical deletion replace the proposed Table-only precheck.
+An ambiguous empty-create/lease initialization retains its artifact row/deleting
+guard and requires explicit settlement; time/HEAD checks are not drain proof.
+No exactly atomic Table+Blob write or exact lifecycle deadline is claimed.
+
+This narrows the former integration gaps but does not certify full #21 physical
+retention: actual host/cloud/RBAC/monitoring, unknown-initializer recovery,
+complete inventory and demonstrated cleanup through outages remain gates.
+See the Blob document for the precise maxima, earlier cleanup targets, consumer
+callbacks, partial-import boundary and manual evidence still missing.

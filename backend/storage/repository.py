@@ -192,6 +192,12 @@ class Repository:
                 raise Conflict("Worker ownership required")
             self._worker(deck_id, job_id, etag, lease_token)
         properties = {**job.properties, "State": target.value, "UpdatedAt": self._now()}
+        if target == State.READY:
+            properties["ProcessingCompletedAt"] = self._now()
+        elif target == State.FAILED:
+            properties["FailedAt"] = self._now()
+        elif target == State.COMPLETED:
+            properties["ImportCommittedAt"] = self._now()
         if usage is not None:
             properties.update(usage.properties())
         if result is not None:
@@ -341,15 +347,25 @@ class Repository:
         properties = {**self._minimal_deck(deck.properties), "State": "deleting"}
         self.table.transact([Write("replace", properties, deck.etag)])
 
-    def finish_deck_deletion(self, deck_id: str) -> None:
+    def finish_deck_deletion(self, deck_id: str, *, limit: int = 500) -> bool:
         """Remove Table children then mapping. External artifacts must already be drained."""
         if self._optional("d:" + identifier(deck_id)) is None:
-            return
+            return True
+        if type(limit) is not int or not 1 <= limit <= 500:
+            raise ValueError("Deletion limit must be 1-500 children")
         self._deck(deck_id, deleting=True)
+        if next(iter(self.table.query(self.partition, f"b:{deck_id}:")), None) is not None:
+            raise Conflict("Blob initialization or physical cleanup is still pending")
+        remaining = limit
         for kind in ("j", "o", "c", "s", "h"):
             batch = []
             for child in self.table.query(self.partition, f"{kind}:{deck_id}:"):
+                if remaining == 0:
+                    if batch:
+                        self._commit(self._deck(deck_id, deleting=True), batch)
+                    return False
                 batch.append(Write("delete", _keys(self.partition, child.properties["RowKey"]), child.etag))
+                remaining -= 1
                 if len(batch) == 99:
                     self._commit(self._deck(deck_id, deleting=True), batch)
                     batch = []
@@ -357,23 +373,35 @@ class Repository:
                 self._commit(self._deck(deck_id, deleting=True), batch)
         deck = self._deck(deck_id, deleting=True)
         self.table.transact([Write("delete", _keys(self.partition, "d:" + deck_id), deck.etag)])
+        return True
+
+    def purge_entity(self, entity: Snapshot, *, cutoff: datetime | None = None) -> bool:
+        """One conditional physical removal; Blob records belong to the retention service."""
+        now = self._now()
+        cutoff = now if cutoff is None else utc(cutoff)
+        if not now <= cutoff <= now + timedelta(hours=1):
+            raise ValueError("Cleanup lead must be at most one hour")
+        properties = entity.properties
+        expiry = properties.get("ExpiresAt")
+        if properties.get("Kind") not in {"Decks", "Jobs", "Documents", "Cards"}:
+            return False
+        if expiry is None or expiry > cutoff:
+            return False
+        deck = self._optional("d:" + properties["DeckId"])
+        if deck is None:
+            raise Inactive("Missing retention ownership guard")
+        if properties["Kind"] == "Decks":
+            self.table.transact([Write("replace", self._minimal_deck(properties), entity.etag)])
+        else:
+            self._commit(deck, [Write("delete", _keys(
+                self.partition, properties["RowKey"],
+            ), entity.etag)])
+        return True
 
     def purge_expired(self) -> int:
         """One user's sweep; scheduler/user inventory belongs to integration, not this schema."""
         removed = 0
         for entity in self.table.query(self.partition):
-            properties = entity.properties
-            expiry = properties.get("ExpiresAt")
-            if expiry is None or expiry > self._now():
-                continue
-            deck = self._optional("d:" + properties["DeckId"])
-            if deck is None:
-                continue
-            if properties["Kind"] == "Decks":
-                self.table.transact([Write("replace", self._minimal_deck(properties), entity.etag)])
-            else:
-                self._commit(deck, [Write("delete", _keys(
-                    self.partition, properties["RowKey"],
-                ), entity.etag)])
+            if self.purge_entity(entity) and entity.properties["Kind"] != "Decks":
                 removed += 1
         return removed

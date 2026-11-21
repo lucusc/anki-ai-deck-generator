@@ -3,6 +3,7 @@ import logging
 import azure.functions as func
 
 from auth import Principal, json_response, require_auth
+from storage.retention import RetentionUnavailable, run_configured_sweep
 
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
@@ -34,3 +35,14 @@ def generation_worker(message: func.QueueMessage) -> None:
         "processing_unavailable: no processor is installed; retain the poison message "
         "and implement issue #8 before submitting jobs."
     )
+
+
+@app.timer_trigger(
+    arg_name="timer", schedule="%RETENTION_SCHEDULE%", run_on_startup=False, use_monitor=True,
+)
+def retention_worker(timer: func.TimerRequest) -> None:
+    try:
+        run_configured_sweep()
+    except RetentionUnavailable:
+        logging.error("retention_unavailable: physical cleanup requires operator recovery")
+        raise
