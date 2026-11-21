@@ -5,6 +5,16 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "AUTH_ISSUER": "",
     "AUTH_AUDIENCE": "",
-    "AUTH_JWKS_URL": ""
+    "AUTH_JWKS_URL": "",
+    "RETENTION_SCHEDULE": "0 */5 * * * *",
+    "AzureWebJobs.retention_worker.Disabled": "true",
+    "RETENTION_USERS": "[]",
+    "STORAGE_TABLE_ENDPOINT": "",
+    "STORAGE_TABLE_NAME": "",
+    "STORAGE_BLOB_ENDPOINT": "",
+    "STORAGE_BLOB_CONTAINER": "",
+    "STORAGE_SUBSCRIPTION_ID": "",
+    "STORAGE_RESOURCE_GROUP": "",
+    "STORAGE_ACCOUNT_NAME": ""
   }
 }

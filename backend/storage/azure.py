@@ -22,10 +22,20 @@ class Write:
     etag: str | None = None
 
 
+@dataclass(frozen=True)
+class Page:
+    rows: tuple[Snapshot, ...]
+    continuation: dict | None
+
+
 class Table(Protocol):
     def get(self, partition: str, row: str) -> Snapshot: ...
     def query(self, partition: str, prefix: str = "") -> Iterable[Snapshot]: ...
     def transact(self, writes: list[Write]) -> None: ...
+    def page(
+        self, partition: str, prefix: str = "", *,
+        continuation: dict | None = None, limit: int = 100,
+    ) -> Page: ...
 
 
 class AzureTable:
@@ -57,18 +67,34 @@ class AzureTable:
         return Snapshot(dict(entity), entity.metadata["etag"])
 
     def query(self, partition: str, prefix: str = "") -> Iterable[Snapshot]:
+        continuation = None
+        while True:
+            page = self.page(partition, prefix, continuation=continuation)
+            yield from page.rows
+            continuation = page.continuation
+            if continuation is None:
+                break
+
+    def page(
+        self, partition: str, prefix: str = "", *,
+        continuation: dict | None = None, limit: int = 100,
+    ) -> Page:
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise ValueError("Page limit must be 1-100")
         parameters = {"partition": partition}
         expression = "PartitionKey eq @partition"
         if prefix:
             # Repository prefixes use only ASCII keys ending in ':'.
-            if not prefix.endswith(":") or not re.fullmatch("[a-z0-9:-]+", prefix):
+            if not prefix.endswith(":") or not re.fullmatch("[a-z0-9_:-]+", prefix):
                 raise ValueError("Canonical row prefix required")
             parameters.update(low=prefix, high=prefix[:-1] + ";")
             expression += " and RowKey ge @low and RowKey lt @high"
-        for entity in self.client.query_entities(
-            query_filter=expression, parameters=parameters, results_per_page=100,
-        ):
-            yield Snapshot(dict(entity), entity.metadata["etag"])
+        pages = self.client.query_entities(
+            query_filter=expression, parameters=parameters, results_per_page=limit,
+        ).by_page(continuation_token=continuation)
+        entities = next(pages)
+        rows = tuple(Snapshot(dict(entity), entity.metadata["etag"]) for entity in entities)
+        return Page(rows, pages.continuation_token)
 
     def transact(self, writes: list[Write]) -> None:
         if not 1 <= len(writes) <= 100:
