@@ -60,6 +60,29 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Accepted #6 foundation, not production deployment
+
+**Owner:** parent coordinator / lead. Reviewed and integrated #6 as `032393e`
+and handoff `9f7311f`. Coordinator CPython 3.13 suite verifies all 34 tests.
+Accept Python 3.13 / Functions v4 / Linux Flex Consumption FC1 as the foundation
+target. East Asia is a documented compatible example, not approved production
+data residency; subscription availability and real host/cloud/provider smoke
+remain unverified release gates.
+
+Use `backend.auth.Principal` with the validated `(issuer, subject)` identity;
+fixed deployment-controlled HTTPS issuer/JWKS and API audience; RS256 bearer
+validation and no caller identity-header trust. Child modules must not bypass
+this authentication boundary. The provisional `generation-jobs` queue worker
+deliberately fails until #8 provides actual processing; there is no accepted
+job payload contract or upload API yet.
+
+#9 owns `backend/extraction/**` and `docs/pdf-extraction.md`; #21 owns
+`backend/storage/**` and `docs/table-storage.md`. Each keeps optional dependencies
+within its subtree and does not change backend root entrypoints/manifests.
+Parent reconciles dependency manifests and imports after reviewing the handoffs.
+Implement Blob operations after the Table ownership/retention contracts are
+reconciled, avoiding parallel invention of competing storage state.
+
 ### 2026-11-21 — Foundation parallel-write boundaries
 
 **Owner:** parent coordinator / lead. #1 owns `addon/` and

@@ -7,6 +7,11 @@
 
 ## Learnings
 
+- 2026-11-21: Accepted #6 implementation as `032393e` with handoff `9f7311f`;
+  reviewed authenticated route/queue boundary and reran 34 backend tests in the
+  coordinator checkout. Real Functions host/cloud/provider smoke remains open.
+  Release gates are not inferred from offline acceptance of the foundation.
+
 - 2026-11-21: Read all project docs and the acceptance criteria of issues #1-48,
   including appended OAuth/PKCE, atomic-quota and temporary-retention criteria.
   Computed nine V1 dependency waves from actual Direct prerequisites; only #1

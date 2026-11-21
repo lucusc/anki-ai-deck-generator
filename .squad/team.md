@@ -31,5 +31,5 @@ support identities for explicitly requested, bounded reviews.
 - **Stack:** Python Azure Functions, Python Anki desktop add-on, Blob/Queue/Table Storage, Azure OpenAI.
 - **Requirements:** `docs/PRD.md`, `docs/architecture.md`, `docs/roadmap.md`, and all current issue acceptance criteria.
 - **State:** local, versioned `.squad/`; see `governance.md` for cross-worktree reconciliation.
-- **Queue:** `backlog.md`; no implementation assignments have been claimed.
+- **Queue:** `backlog.md`; the parent records active assignments and acceptance evidence.
 - **Preset provenance:** unused default identities are retired in the canonical casting registry, not reused under different roles.
