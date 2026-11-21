@@ -41,10 +41,11 @@ and restores the identical dictionary with the public `decks.update(...,
 preserve_usn=True)` sync/merge API. The ID, full returned dictionary and result
 of ID-only revalidation are identical. These core experiments do not establish
 how frequently either situation occurs through the desktop UI. An ID/name or
-metadata fingerprint cannot prove incarnation continuity. This prerequisite
-contract gap requires a broader profile/deck-lifetime solution or an accepted
-fail-closed boundary; this slice does not invent an unsupported identity or
-modify the selector.
+metadata fingerprint cannot prove incarnation continuity. The coordinator's
+accepted boundary is Anki's logical numeric ID, not an incarnation guarantee:
+an indistinguishable same-ID restoration or recreation is treated as the captured
+target. Existing-deck imports remain enabled; this slice neither substitutes a
+create-new-only workflow nor invents an unsupported identity.
 
 The public [operation completion hook](https://github.com/ankitects/anki/blob/25.09/qt/tools/genhooks_gui.py)
 is a UI notification after an operation, not a proven fence for all writes.
@@ -110,5 +111,7 @@ each of Anki core 25.9 and 26.9.4 installed. The standard-library-only run passe
 These are **core-library** checks, not installed Anki/Qt desktop tests or a
 full application restart. Actual 25.09 and 26.09.4 Qt rendering, browser/reviewer
 views, profile switch/cancellation, undo behavior and responsive collection
-operations remain unverified. Review-screen integration, stable identity under
-same-ID reuse, duplicate-safe retry and backend acknowledgement remain open.
+operations remain unverified. Review-screen and profile-lifetime integration,
+duplicate-safe retry and backend acknowledgement remain open. Indistinguishable
+same-ID replacement is a documented limitation of the accepted logical-ID
+boundary, not a promised incarnation guarantee.

@@ -243,7 +243,7 @@ class RealAnkiBasicImportTests(unittest.TestCase):
             finally:
                 col.close()
 
-    def test_deleted_deck_and_reused_name_never_receive_an_import(self):
+    def test_deleted_deck_and_reused_name_with_different_id_never_receive_an_import(self):
         from anki.collection import Collection
 
         with tempfile.TemporaryDirectory() as directory:

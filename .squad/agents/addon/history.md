@@ -112,6 +112,8 @@
   both cores deterministically restore identical public data via the sync/merge
   API. The accepted ID-only contract cannot distinguish either case, and
   desktop UI timing and likelihood have not been measured.
-- Contract proposal: addon-26-basic-import-contract.md; remaining release gates
-  include stable deck lifetime, Qt/profile/undo verification and later review,
-  duplicate-safe retry and acknowledgement integration.
+- Coordinator accepted logical numeric-ID targeting, explicitly not an
+  incarnation guarantee; existing-deck imports remain enabled. The contract is
+  recorded in addon-26-basic-import-contract.md. Remaining release gaps include
+  Qt/profile/undo verification and later review, duplicate-safe retry and
+  acknowledgement integration.
