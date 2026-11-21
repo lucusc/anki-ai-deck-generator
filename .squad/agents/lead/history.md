@@ -7,6 +7,13 @@
 
 ## Learnings
 
+- 2026-11-21: Text parser PR #60 merged `bc8d0a8` and #12 closed after
+  reviewed heading/boundary regressions. Basic helper PR #62 merged `e7d71d0`;
+  parent verified 11 tests on real core 26.09.4, with child two-core evidence.
+  #26 still awaits user-facing integration. Standalone parser test pins were
+  patched via PR #61; redundant bot PRs #56-58 are closed. New #10/#27 work
+  uses Fusion High in disjoint pipeline/add-on scopes, with exact ownership.
+
 - 2026-11-21: PR #55 reviewed/merged at `ef9ffe5`; 192 combined backend tests
   passed with six existing Linux-only skips. Unknown initialization settlement
   and real Azure/host/deadline recovery still gate #18/#21 and dependent APIs.

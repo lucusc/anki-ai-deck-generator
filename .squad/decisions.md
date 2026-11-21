@@ -60,6 +60,30 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — TXT/Markdown accepted and Basic helper integrated
+
+**Owner:** parent coordinator / lead. PR #60 merged as `bc8d0a8`; #12 is
+verified closed after its parser acceptance was fulfilled. Accept frozen
+text-native-1 sections, UTF-8/BOM/newline/NFC handling, source lines and heading
+paths, inert embedded content, and no partial sections on explicit hard limits.
+Output budgets include repeated ancestor heading labels, not just body text.
+Parent verified 29 focused tests and 221 combined backend tests (six existing
+Linux-only skips); reviewed two heading regressions before merging.
+
+PR #62 merged as `e7d71d0`. Accept the explicitly approved Basic-only helper
+with captured collection/numeric target, strict mapper/source formatting and
+supported saved-note writes/change notifications. Parent independently verified
+11 focused tests with real Anki core 26.09.4; child recorded all 81 add-on tests
+on both 25.09 and 26.09.4. Qt/review/profile/cancellation, undo, retry and
+acknowledgement integration remain open; #26 was not automatically closed.
+
+#10 owns bounded DOCX parsing and its scoped dependency/notice/export additions.
+#27 owns reversed-note import/count/budget/identity behavior and may narrowly
+share/refactor the Basic helper without changing its public behavior or
+implementing the unassigned generic duplicate/hash workflow. Preserve the
+accepted logical-ID limitation. Card budgets must count actual rendered cards,
+not template or note counts, and must not invent global quota defaults.
+
 ### 2026-11-21 — Logical Anki identity, not an incarnation guarantee
 
 **Owner:** parent coordinator / lead. Retain the accepted Anki numeric-ID

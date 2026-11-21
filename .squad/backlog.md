@@ -51,9 +51,9 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
 | #8 | Implement card generation endpoint | #7, #9, #16, #17 | functions | 6 | blocked | unclaimed |
 | #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | native component merged; Azure release smoke pending | released; PR #53, merge `4c08838`; license-compatible pypdf |
-| #10 | Support DOCX extraction | #6 | pipeline | 1 | ready | unclaimed |
+| #10 | Support DOCX extraction | #6 | pipeline | 1 | assigned | `107eee13-7b7c-4af2-94fb-ca7935b8c4dd`; `lucusc-redesigned-bassoon`; Fusion High |
 | #11 | Support PowerPoint extraction | #6 | pipeline | 1 | ready | unclaimed |
-| #12 | Support Markdown extraction | #6 | pipeline | 1 | assigned | `6236e88c-4de5-48ad-ab7a-15b991e72afa`; `lucusc-upgraded-fishstick`; Auto Balance |
+| #12 | Support Markdown extraction | #6 | pipeline | 1 | complete; GitHub issue closed | released; PR #60, merge `bc8d0a8`; parser acceptance fulfilled |
 | #13 | Implement OCR fallback path | #9, #18, #32 | pipeline | 2 | blocked | unclaimed |
 | #14 | Create subject detection workflow | #9, #12 | pipeline | 2 | blocked | unclaimed |
 | #15 | Implement card-type classification | #14 | pipeline | 3 | blocked | unclaimed |
@@ -67,8 +67,8 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
 | #25 | Create note model mapper | #1, #3 | addon | 2 | mapper merged/offline-verified; real persistence/render integration pending | released; PR #52, merge `6ac7669` |
-| #26 | Support Basic notes | #25 | addon | 3 | assigned | `4504581f-4e6a-4fc7-bed0-ef6bc397be85`; `lucusc-stunning-couscous`; Fusion High |
-| #27 | Support Reverse notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
+| #26 | Support Basic notes | #25 | addon | 3 | core helper merged; user-facing integration open | released; PR #62, merge `e7d71d0`; logical-ID limitation accepted |
+| #27 | Support Reverse notes | #25 | addon | 3 | assigned | `d5047891-fb6a-4a71-89da-177af022d8fb`; `lucusc-special-disco`; Fusion High |
 | #28 | Support Cloze notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
 | #29 | Support custom tags | #25 | addon | 3 | ready | unclaimed |
 | #30 | Store source metadata in notes | #25 | addon | 3 | ready | unclaimed |
