@@ -20,6 +20,9 @@ This repository contains requirements, Squad coordination, and initial Anki add-
 - [Backend development](docs/backend-development.md)
 - [Anki add-on development](docs/addon-development.md)
 - [Deck selection](docs/deck-selector.md)
+- [Audience settings and pending integration](docs/audience-settings.md)
+- [Versioned note payload and mapper](docs/note-payload.md)
+- [Bounded native PDF extraction](docs/pdf-extraction.md)
 - [Table Storage contract and retention gaps](docs/table-storage.md)
 - [Implementation issues](https://github.com/lucusc/anki-ai-deck-generator/issues)
 
