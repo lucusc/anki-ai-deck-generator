@@ -49,3 +49,25 @@
   running creation can commit after close and must not be silently deleted.
 - Contract proposal: addon-3-stable-deck-contract.md; docs/deck-selector.md records
   API evidence and honest desktop/provider/undo gaps. Parent owns reconciliation.
+
+### 2026-11-21 — Issue #4 audience selector
+
+- Own checkout/TEAM_ROOT with STATE_BACKEND=local; dispatch identity 53116c8
+  integrated as 047a559 before edits. Branch: lucusc-audience-selector.
+- Added all five exact accepted product options to the existing single
+  modeless Tools workflow, with no initial default, explicit read-only label,
+  profile-local reopen state and profile-close reset. Audience changes never
+  touch destination selection, credentials, collection or network.
+- Frozen AudienceSettings is an audience-only projection, not the full future
+  job schema. Capture detaches from mutable mappings and later combo choices.
+  Invalid reselection clears the live choice instead of reusing old settings.
+  Server validator rejects missing/unknown/non-string values with fixed errors.
+- Client/server contracts are independent distributable modules with tested
+  golden/round-trip/error parity; never import the add-on entry point in backend.
+  OAuth/API token audience remains separate from study audience settings.
+- 54 add-on and 100 backend/storage regressions passed, including packaged
+  Anki target doubles and source mutations for defaults/validation/immutability.
+  Actual Anki/Qt/provider and job/review endpoint integration remain open.
+- docs/audience-settings.md and addon-4-audience-settings.md describe the exact
+  #7 validator caller, #8 persisted snapshot and #5 review label obligations.
+  Parent owns full schema/state acceptance and serial PR review/merge.

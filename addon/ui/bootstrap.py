@@ -1,3 +1,4 @@
+from ..models.audience import AudienceSelection
 from ..models.auth import AddonError, OAuthConfig
 from ..models.deck import DeckSelection
 from ..services.privacy import event
@@ -28,6 +29,7 @@ def install(package_name: str) -> None:
 
             def __init__(self):
                 self.selection = DeckSelection()
+                self.audience_selection = AudienceSelection()
 
             def open(self):
                 try:
@@ -42,7 +44,9 @@ def install(package_name: str) -> None:
                     config = OAuthConfig.from_mapping(mw.addonManager.getConfig(package_name))
                     from .signin import SignInDialog
 
-                    self.dialog = SignInDialog(mw, config, mw.pm.name, self.selection)
+                    self.dialog = SignInDialog(
+                        mw, config, mw.pm.name, self.selection, self.audience_selection,
+                    )
                     self.dialog.show()
                 except Exception as error:
                     safe = error if isinstance(error, AddonError) else AddonError("internal")
@@ -55,6 +59,7 @@ def install(package_name: str) -> None:
                         self.dialog.reject()
                     self.dialog = None
                 self.selection.target = None
+                self.audience_selection.settings = None
 
         _controller = Controller()
         qconnect(action.triggered, lambda checked=False: _controller.open())
