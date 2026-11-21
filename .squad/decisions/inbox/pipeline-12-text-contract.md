@@ -1,0 +1,4 @@
+### 2026-11-21: Proposed TXT and Markdown extraction contract
+**By:** pipeline
+**What:** Add standard-library `extract_txt` and `extract_markdown` APIs returning frozen `TextExtraction` and `TextSection` values. Sections retain one-based inclusive source line references and immutable heading paths; Markdown recognizes ATX and Setext headings outside fenced code. Empty, invalid UTF-8 and bounded-resource failures use fixed outcomes and return no partial sections. Default bounds are 4 MiB input, 100,000 normalized lines, 10,000 sections and 1,000,000 output characters.
+**Why:** This provides deterministic, content-free failure reporting and useful source attribution without third-party parsing, markup execution, truncation or changes to the accepted PDF contract. It is a proposal for parent review; downstream upload, storage, generation and Anki integration remain out of scope.
