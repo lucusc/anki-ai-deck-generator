@@ -60,3 +60,16 @@
   references. Final default backend tests: Linux **153 passed / 1 skipped**,
   macOS **148 passed / 6 skipped**. Handoff now includes PR-based integration
   evidence; parent reviews/merges this issue-only delta.
+
+### 2026-11-21 - Issue #12 TXT and Markdown extraction handoff
+
+- Implemented standard-library UTF-8 extraction with frozen results, one-based
+  source lines, nested ATX/Setext Markdown heading paths, literal fenced code,
+  and explicit empty, invalid-encoding and resource-limit outcomes.
+- Defaults bound source bytes (4 MiB), normalized lines (100,000), sections
+  (10,000) and output characters (1,000,000). Limit failures discard all
+  partial sections; embedded markup is returned as inert text.
+- Synthetic tests cover Unicode/BOM/newline normalization, exact configured
+  limits, heading/reference behavior, invalid UTF-8, empties and inert content.
+  Focused text tests, the extraction suite and the full backend suite passed on
+  macOS CPython 3.13; no Azure, Anki, worker or generation integration was run.
