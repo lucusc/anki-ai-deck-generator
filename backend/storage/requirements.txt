@@ -1,2 +1,4 @@
 azure-data-tables==12.7.0
 azure-identity==1.25.1
+azure-storage-blob==12.27.0
+azure-mgmt-storage==24.0.0
