@@ -60,6 +60,36 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Accepted Table schema with unresolved integration gates
+
+**Owner:** parent coordinator / lead. #21 feature/handoff integrated as
+`56a2a09`/`e9791de`; coordinator reran 77 backend/storage tests. Tests and the
+default runner now use the deployed Functions module root, avoiding duplicate
+`backend.storage`/`storage` package identities.
+
+Accept one physical Azure Table with logical Documents/Cards/Decks/Jobs,
+user partition derived from validated issuer/subject, never-reused server deck
+mapping UUIDs, and a concrete-ETag deck guard in each child transaction.
+Accept imported source/card hash lookup rows as minimal identity indexes,
+not compatible result caches or in-flight generation reservations.
+Opaque artifact locator proposal is
+`{userPartition}/{deckUUID}/{jobUUID}/{artifactClass}/{artifactUUID}`.
+
+Schema-level exact-cutoff denial and `purge_expired` are implemented, but
+physical 30-day retention requires bounded monitored sweep integration.
+Table fencing alone cannot revoke SAS or stop an already authorized Blob PUT.
+#18 must implement and verify write-authority invalidation/drain and raced-write
+cleanup before deck finalization; failed cleanup retains the deleting guard.
+These remain integration blockers, not accepted guarantees. #7/#19/#23 cannot
+be dispatched on a claim that #21's physical retention/deletion is complete.
+
+#18 owns new Blob/retention modules, tests and scoped dependencies under storage,
+plus directly required retention extensions to the existing repository/adapter.
+It does not replace the accepted keys, auth or ETag contracts, or implement
+unassigned upload/job/quota endpoints. #18 may add only retention-related timer
+bindings/configuration and directly related foundation tests, preserving HTTP
+and generation-worker behavior. Parent owns root manifests and shared docs.
+
 ### 2026-11-21 — Accepted #1 foundation, desktop evidence still open
 
 **Owner:** parent coordinator / lead. Reviewed and integrated #1 as `0c0ce0a`,

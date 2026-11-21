@@ -7,7 +7,7 @@ from azure.core.pipeline.transport import HttpResponse, HttpTransport
 from azure.data.tables import TableClient
 import pytest
 
-from backend.storage.azure import AzureTable, Write
+from storage.azure import AzureTable, Write
 
 
 class SyntheticCredential:

@@ -7,6 +7,11 @@
 
 ## Learnings
 
+- 2026-11-21: Reviewed #21 and integrated `56a2a09`/`e9791de`; 77 backend
+  tests pass after aligning tests/default runner with the Functions module root.
+  Accept physical single-table fencing layout, but keep physical-retention and
+  Blob late-write drain gates open for #18 before dispatching dependent APIs.
+
 - 2026-11-21: Accepted #1 implementation offline as `0c0ce0a`/`a13c5c4`;
   coordinator reran 31 add-on and 34 backend tests. Desktop, native-store and
   provider evidence remains open. Serialize #3/#4 shared UI wiring while #9

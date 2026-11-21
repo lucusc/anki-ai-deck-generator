@@ -59,10 +59,10 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #15 | Implement card-type classification | #14 | pipeline | 3 | blocked | unclaimed |
 | #16 | Develop Anki generation prompt | #15 | pipeline | 4 | blocked | unclaimed |
 | #17 | Implement card quality validation | #16 | pipeline | 5 | blocked | unclaimed |
-| #18 | Implement Blob Storage integration | #6 | functions | 1 | ready | unclaimed; defer dispatch until #21 storage contract is reconciled |
+| #18 | Implement Blob Storage integration | #6 | functions | 1 | assigned | Blob/retention integration; identity appended before execution |
 | #19 | Implement file hash tracking | #18, #21 | functions | 2 | blocked | unclaimed |
 | #20 | Prevent duplicate file processing | #19 | functions | 3 | blocked | unclaimed |
-| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | assigned | `28606417-5782-4a37-a98b-72a5a835744a`; initial `lucusc-psychic-winner` |
+| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | schema integrated; physical retention/deletion integration blocked | released; `56a2a09`, `e9791de`; #18 must resolve integration gates before dependent API dispatch |
 | #22 | Create concept hash generation | #17 | pipeline | 6 | blocked | unclaimed |
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |

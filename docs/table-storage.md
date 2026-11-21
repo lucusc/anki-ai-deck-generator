@@ -157,16 +157,17 @@ physical layout, locator and drain protocol belongs to parent/lead before #18.
 
 ## Configuration and offline verification
 
-Install scoped dependencies without editing the backend root manifests:
+The parent-integrated backend manifest includes the scoped storage dependencies.
+Run the complete backend suite from its Functions module root:
 
 ```sh
-python3.13 -m venv backend/storage/.venv
-backend/storage/.venv/bin/python -m pip install -r backend/requirements-dev.txt -r backend/storage/requirements.txt
-PYTHONPATH=.:backend backend/storage/.venv/bin/python -m pytest -q backend/storage/tests backend/tests
+cd backend
+python3.13 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m pytest
 ```
 
-Parent integration must include `storage/requirements.txt` in the backend
-dependency manifest. The Functions app runs with `backend/` as its module root:
+The Functions app runs with `backend/` as its module root:
 the library imports `auth.Principal`, exactly as the accepted foundation does.
 Do not independently import the same file as `backend.auth` and create a second
 class identity. No root HTTP/auth/manifest changes are made in this scoped issue.

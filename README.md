@@ -19,6 +19,7 @@ This repository contains requirements, Squad coordination, and initial Anki add-
 - [Roadmap](docs/roadmap.md)
 - [Backend development](docs/backend-development.md)
 - [Anki add-on development](docs/addon-development.md)
+- [Table Storage contract and retention gaps](docs/table-storage.md)
 - [Implementation issues](https://github.com/lucusc/anki-ai-deck-generator/issues)
 
 ## Architecture

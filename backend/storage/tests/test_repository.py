@@ -8,11 +8,11 @@ from azure.core.exceptions import (
 import pytest
 
 from auth import Principal
-from backend.storage.azure import Snapshot
-from backend.storage.models import (
+from storage.azure import Snapshot
+from storage.models import (
     ArtifactKind, ArtifactReference, Provenance, State, Usage, user_partition,
 )
-from backend.storage.repository import Conflict, Inactive, Repository
+from storage.repository import Conflict, Inactive, Repository
 
 
 HASH = "a" * 64
