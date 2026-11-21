@@ -60,6 +60,20 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — User-directed GitHub PR and main integration
+
+**Owner:** parent coordinator / lead. User direction:
+"integrating all these branches and changes locally can be challenging to keep
+straight leverage gh prs for this and merge into main."
+
+Switch from local cherry-pick aggregation to GitHub PRs. Land already reviewed
+coordinator state through one bootstrap PR, then child issue PRs against `main`.
+Children merge current `origin/main` before opening their PR; coordinator
+reviews and merges serially, preserving prerequisite ancestry and canonical
+ownership. Record PR URLs/head/merge commits, not just local feature SHAs.
+Unmet acceptance criteria keep issues open with non-closing references.
+No deployments, paid services, watchers or generated Agent merge are enabled.
+
 ### 2026-11-21 — Deck identity and next disjoint add-on scopes
 
 **Owner:** parent coordinator / lead. #3 integrated as `acf2549`/`160605a`;
