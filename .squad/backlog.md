@@ -44,7 +44,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 |-------|-------|----------------------|-------|------|-------|--------------|
 | #1 | Create Anki add-on project structure | None | addon | 0 | accepted offline; desktop/provider smoke pending | released; `0c0ce0a`, `a13c5c4` |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
-| #3 | Implement deck selector | #1 | addon | 1 | assigned | Deck selector; identity appended before execution |
+| #3 | Implement deck selector | #1 | addon | 1 | assigned | `e055f7be-4957-4f1d-8649-c817ddd076a0`; initial `lucusc-fuzzy-doodle` |
 | #4 | Implement audience selector | #1 | addon | 1 | ready | unclaimed; serialize shared UI wiring after #3 |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
