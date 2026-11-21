@@ -58,6 +58,30 @@ before retaining generated workflows or overwritten governance.
    multiple sequential tasks, but each implementation issue has one active
    owner. Synchronize accepted decisions into children before dependent work.
 
+## Explicitly requested GitHub PR integration
+
+When the user explicitly requests GitHub PRs and merging into `main`, use one
+issue-scoped PR per implementation child and reviewed serial merges instead of
+repeated local cherry-picks. Already accumulated coordinator changes may land
+in a clearly described bootstrap PR; do not create duplicate issue PRs for code
+already included there.
+
+After the bootstrap merge, children fetch and merge `origin/main` into their
+own branches before opening PRs. Preserve their implementation and reconcile
+canonical records semantically; never overwrite main with a stale child
+backlog. Each handoff includes the real PR URL, head SHA, issue acceptance
+evidence and unresolved gates. The coordinator reviews the actual PR delta,
+checks required statuses and merges through GitHub without bypassing protection.
+Use merge commits when available to preserve shared prerequisite ancestry.
+Synchronize the coordinator's feature checkout with merged `origin/main`;
+never mutate the main checkout directly.
+
+Use closing issue references only when every acceptance criterion is satisfied.
+Merging useful foundation code does not close missing desktop/cloud/retention
+verification. Keep those issues open and linked with non-closing references.
+This explicit PR workflow does not authorize deployment, paid services,
+watchers, generated automation, or unattended Agent merge.
+
 ## Persistence and limitations
 
 `stateBackend: local` means branch-local filesystem state. It provides no
