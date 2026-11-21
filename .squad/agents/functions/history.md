@@ -104,3 +104,9 @@
   User-directed PR reconciliation superseded the original no-PR handoff via
   the parent message; merge current origin/main before opening the issue-only
   PR, preserve canonical ownership, and use only non-closing issue references.
+- Final offline evidence before PR: 121 scoped storage/foundation cases; after
+  canonical main integration, 192 backend cases passed and six existing
+  Linux-only PDF checks skipped on macOS/CPython 3.13.9. Real configured
+  retention execution was exercised through actual SDK HTTP transports with
+  no sockets. Source mutations rejected physical-delete, expiry and lease-header
+  regressions. Compilation/whitespace passed; live verification remains open.
