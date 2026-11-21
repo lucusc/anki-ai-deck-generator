@@ -60,6 +60,93 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — User-directed GitHub PR and main integration
+
+**Owner:** parent coordinator / lead. User direction:
+"integrating all these branches and changes locally can be challenging to keep
+straight leverage gh prs for this and merge into main."
+
+Switch from local cherry-pick aggregation to GitHub PRs. Land already reviewed
+coordinator state through one bootstrap PR, then child issue PRs against `main`.
+Children merge current `origin/main` before opening their PR; coordinator
+reviews and merges serially, preserving prerequisite ancestry and canonical
+ownership. Record PR URLs/head/merge commits, not just local feature SHAs.
+Unmet acceptance criteria keep issues open with non-closing references.
+No deployments, paid services, watchers or generated Agent merge are enabled.
+
+### 2026-11-21 — Deck identity and next disjoint add-on scopes
+
+**Owner:** parent coordinator / lead. #3 integrated as `acf2549`/`160605a`;
+parent reviewed deck/API/UI behavior and reran all 45 add-on tests. Accept
+immutable numeric `DeckIdentity` with profile-local selection and explicit
+rename/deletion revalidation. Capture and revalidate the same ID within the
+serialized collection operation immediately before later import; never resolve
+by a reused name or default fallback. Filtered decks are not import targets.
+Actual desktop/undo checks remain unverified.
+
+#4 owns audience UI wiring, dedicated client models and a dedicated server
+validator under `backend/contracts/`, without touching auth/retention routes.
+The audience contract is required field `audience`, exact wire values
+`middle_school`, `high_school`, `university`, `certification`, `professional`,
+with corresponding product labels. Unknown or missing values fail validation,
+not default/alias coercion. Capture immutable job/review settings so later
+UI changes do not alter an accepted request's audience. Actual job/review HTTP
+integration is not invented before #7/#8/#5.
+
+#25 owns dedicated note payload/model-mapping/markup modules and tests, not
+existing Tools/sign-in/deck/audience modules. It proposes the typed versioned
+note contract for later backend generation; root manifests, shared docs/state
+and runtime import/generation endpoints remain outside its scope.
+
+### 2026-11-21 — Accepted Table schema with unresolved integration gates
+
+**Owner:** parent coordinator / lead. #21 feature/handoff integrated as
+`56a2a09`/`e9791de`; coordinator reran 77 backend/storage tests. Tests and the
+default runner now use the deployed Functions module root, avoiding duplicate
+`backend.storage`/`storage` package identities.
+
+Accept one physical Azure Table with logical Documents/Cards/Decks/Jobs,
+user partition derived from validated issuer/subject, never-reused server deck
+mapping UUIDs, and a concrete-ETag deck guard in each child transaction.
+Accept imported source/card hash lookup rows as minimal identity indexes,
+not compatible result caches or in-flight generation reservations.
+Opaque artifact locator proposal is
+`{userPartition}/{deckUUID}/{jobUUID}/{artifactClass}/{artifactUUID}`.
+
+Schema-level exact-cutoff denial and `purge_expired` are implemented, but
+physical 30-day retention requires bounded monitored sweep integration.
+Table fencing alone cannot revoke SAS or stop an already authorized Blob PUT.
+#18 must implement and verify write-authority invalidation/drain and raced-write
+cleanup before deck finalization; failed cleanup retains the deleting guard.
+These remain integration blockers, not accepted guarantees. #7/#19/#23 cannot
+be dispatched on a claim that #21's physical retention/deletion is complete.
+
+#18 owns new Blob/retention modules, tests and scoped dependencies under storage,
+plus directly required retention extensions to the existing repository/adapter.
+It does not replace the accepted keys, auth or ETag contracts, or implement
+unassigned upload/job/quota endpoints. #18 may add only retention-related timer
+bindings/configuration and directly related foundation tests, preserving HTTP
+and generation-worker behavior. Parent owns root manifests and shared docs.
+
+### 2026-11-21 — Accepted #1 foundation, desktop evidence still open
+
+**Owner:** parent coordinator / lead. Reviewed and integrated #1 as `0c0ce0a`,
+handoff `a13c5c4`; coordinator reran all 31 add-on tests and 34 backend tests.
+Accept Qt6 desktop 25.09 and 26.09.4 as compatibility targets, not demonstrated
+real-desktop support. Actual Anki restart/Qt, native credential-store round
+trips and approved-provider consent/refresh/revocation remain release gates.
+
+Accepted public config is issuer/client_id/audience/scopes. Browser sign-in
+requires exact-issuer OIDC discovery, S256 and a native-client ephemeral IPv4
+loopback redirect. Refresh credentials use native protected OS stores and
+profile/deployment-specific accounts; access tokens stay in memory. Windows
+refresh blobs have an explicit 2560-byte limit. Provider compatibility must be
+verified against the accepted RS256 API boundary before production use.
+
+#3 owns deck models/services/widget, the existing Tools/sign-in UI wiring and
+its related tests. #4 waits for that shared UI write ownership to be released;
+this is serialization of files, not a new graph prerequisite.
+
 ### 2026-11-21 — Accepted #6 foundation, not production deployment
 
 **Owner:** parent coordinator / lead. Reviewed and integrated #6 as `032393e`

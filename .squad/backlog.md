@@ -4,7 +4,9 @@ Canonical Squad offline backlog (`templates/prd-intake.md`); requirements remain
 the live [GitHub issues](https://github.com/lucusc/anki-ai-deck-generator/issues).
 Snapshot: 2026-11-21 UTC, all 48 issues open; all acceptance criteria and appended
 OAuth/temporary-retention requirements reviewed. #6 implementation is integrated
-and offline-verified; real Functions host/cloud smoke remains pending. #1 is active.
+and offline-verified; real Functions host/cloud smoke remains pending. #1 is
+integrated and offline-verified; actual Anki/OS-store/provider smoke remains
+pending. Neither foundation is production-certified or closed on GitHub.
 
 ## Dependency-ready V1 waves
 
@@ -40,10 +42,10 @@ on the listed prerequisites; completion requires the full issue acceptance.
 
 | Issue | Title | Direct prerequisites | Route | Wave | State | Active claim |
 |-------|-------|----------------------|-------|------|-------|--------------|
-| #1 | Create Anki add-on project structure | None | addon | 0 | assigned | `27cf3989-5ddb-4f18-a18a-dda7b5b51687`; `lucusc-anki-addon-foundation` |
+| #1 | Create Anki add-on project structure | None | addon | 0 | accepted offline; desktop/provider smoke pending | released; `0c0ce0a`, `a13c5c4` |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
-| #3 | Implement deck selector | #1 | addon | 1 | blocked | unclaimed |
-| #4 | Implement audience selector | #1 | addon | 1 | blocked | unclaimed |
+| #3 | Implement deck selector | #1 | addon | 1 | accepted offline; real desktop smoke pending | released; `acf2549`, `160605a` |
+| #4 | Implement audience selector | #1 | addon | 1 | assigned | `0666d3c9-abeb-46d7-a87a-ae473ba07d5e`; initial `lucusc-super-telegram` |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
@@ -57,14 +59,14 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #15 | Implement card-type classification | #14 | pipeline | 3 | blocked | unclaimed |
 | #16 | Develop Anki generation prompt | #15 | pipeline | 4 | blocked | unclaimed |
 | #17 | Implement card quality validation | #16 | pipeline | 5 | blocked | unclaimed |
-| #18 | Implement Blob Storage integration | #6 | functions | 1 | ready | unclaimed; defer dispatch until #21 storage contract is reconciled |
+| #18 | Implement Blob Storage integration | #6 | functions | 1 | assigned | `85ee0d0b-3280-4230-b3a1-b07e207c2535`; initial `lucusc-shiny-fortnight` |
 | #19 | Implement file hash tracking | #18, #21 | functions | 2 | blocked | unclaimed |
 | #20 | Prevent duplicate file processing | #19 | functions | 3 | blocked | unclaimed |
-| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | assigned | `28606417-5782-4a37-a98b-72a5a835744a`; initial `lucusc-psychic-winner` |
+| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | schema integrated; physical retention/deletion integration blocked | released; `56a2a09`, `e9791de`; #18 must resolve integration gates before dependent API dispatch |
 | #22 | Create concept hash generation | #17 | pipeline | 6 | blocked | unclaimed |
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
-| #25 | Create note model mapper | #1, #3 | addon | 2 | blocked | unclaimed |
+| #25 | Create note model mapper | #1, #3 | addon | 2 | assigned | `6aee107a-063e-41f5-b872-4a39b748c2a7`; initial `lucusc-silver-couscous` |
 | #26 | Support Basic notes | #25 | addon | 3 | blocked | unclaimed |
 | #27 | Support Reverse notes | #25 | addon | 3 | blocked | unclaimed |
 | #28 | Support Cloze notes | #25 | addon | 3 | blocked | unclaimed |

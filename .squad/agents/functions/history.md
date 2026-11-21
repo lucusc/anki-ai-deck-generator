@@ -36,3 +36,36 @@
 - Functions Core Tools and Azurite were absent; real host HTTP/queue/poison
   behavior was not smoke-tested. No Azure/real-provider smoke or subscription
   region check was performed; no deployments, paid calls or GitHub writes.
+
+### 2026-11-21 — Issue #21 Table schema handoff
+
+- Accountable child `28606417-5782-4a37-a98b-72a5a835744a`, own checkout as
+  `TEAM_ROOT`, `STATE_BACKEND=local`; final branch `lucusc-table-storage-schema`.
+  Parent identity `1c87f33` cherry-picked as `24ab170` before edits; implementation
+  `d9077c62eb224d904e8703ff2a27a5c95d1a5351` follows accepted #6 base `5b771c2`.
+- Logical Documents/Cards/Decks/Jobs live in one physical Table/user partition.
+  Every child write includes a concrete-ETag deck guard replacement in the same
+  transaction, fencing committed deletion/reclaim without inventing cross-table
+  atomicity. Partition includes the exact validated issuer/subject pair; keep the
+  existing Functions module-root `auth.Principal` class identity.
+- Operational expiry is fixed at job creation + 30 days; children cannot extend
+  it. Deck descriptive fields expire separately. Only imported-source hashes
+  (including compatibility hash) and card hashes/import UUIDs persist with the
+  minimal deck mapping. Result locators are opaque class/UUID/expiry, not content
+  or SAS URLs. Explicit lookup identity is not a result cache or hash algorithm.
+- Deck deletion first fences, then requires external Blob write-authority
+  drain/cleanup, then removes Table children and mapping. Table checks do not
+  revoke issued SAS or stop already in-flight PUTs. Exact #18 drain semantics and
+  bounded physical retention scheduling remain parent/lead integration blockers;
+  proposed contracts are in `functions-21-table-contract-28606417.md`.
+- Production Azure SDK adapter is tested through a socket-free HTTP transport:
+  conditional multipart batches, ETags, partitioned queries/continuations and
+  404/412/503 failures. Offline atomic test double is separately labelled.
+  Final suite: 43 storage + 34 existing foundation tests, 77 passed on Python
+  3.13. Compile/whitespace and Functions module-root Principal checks passed.
+  In-memory source mutations removing deck fencing, the exact retention cutoff
+  and issuer isolation were rejected; no source files were mutated on disk.
+- No emulator/real Azure Table, managed identity/RBAC, Functions host or physical
+  retention/deletion service was exercised. No Blob operations, root manifests,
+  HTTP/auth changes, quotas, hash algorithms, deployment, paid/GitHub writes or
+  nested agents. Stop after committed handoff; parent reconciles dependencies.
