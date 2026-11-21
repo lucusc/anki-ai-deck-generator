@@ -143,3 +143,81 @@ concurrent memory headroom and representative real-PDF fidelity/performance were
 sessions, GitHub writes or PRs were performed. #13 OCR and later temporary-storage,
 expiry/deletion, quota, source-hash and generation responsibilities remain outside
 this slice. Stop after handing these commits to the parent.
+
+## User-directed GitHub PR handoff
+
+The user's subsequent PR/serial-main request supersedes the local cherry-pick
+delivery above. The earlier evidence remains historical, not a second active
+assignment.
+
+| Field | Evidence |
+| --- | --- |
+| PR | https://github.com/lucusc/anki-ai-deck-generator/pull/53 |
+| Base | `main`, synced through reviewed PR #50 at `04e139ab4814fe30242da616c39d5a3c9e559944` |
+| Branch | `lucusc-pdf-extraction` |
+| Implementation/integration | `765d72a`, `23ad3c8`; main bootstrap/audience ancestry merged, not duplicated in PR delta |
+| Verified PR head at opening | `d21be68b5f8bb43a38dc7f3002fa077acd0bfaf3`; this append is a following documentation-only commit |
+| Closing references | `gh pr view --json closingIssuesReferences` returned `[]` |
+| Integration method | Parent reviews and merges the actual PR serially; no more local cherry-pick handoff |
+
+The coordinator explicitly extended #9 scope to `backend/requirements.txt`,
+`backend/pyproject.toml` and directly related imports/docs. The PR includes
+`-r extraction/requirements.txt`, retains the existing storage include, and
+adds extraction to default pytest discovery. Tests/docs use the deployed
+backend-root `extraction` namespace, not `backend.extraction`/`backend.auth`.
+Main's canonical stale-assignment conflict was resolved in main's favor; there
+is no backlog or other-member delta in this PR.
+
+The isolated worker also recognizes the fixed deployment-owned Functions
+`.python_packages/lib/site-packages` directory **after** installing OS limits.
+A clean interpreter without a globally installed parser runs the actual parser
+from this packaging layout. No input-derived path, inherited credentials or
+environment Python path is allowed.
+
+### Final integrated verification
+
+After syncing `main` through PR #50, the **default complete backend suite**
+passes on both platforms:
+
+```sh
+cd backend
+python3.13 -m venv .venv
+.venv/bin/python -m pip install --quiet -r requirements-dev.txt
+.venv/bin/python -B -m pytest -o addopts= -q
+```
+
+macOS CPython 3.13.9: **148 passed, 6 Linux-only skipped in 2.45s**.
+Linux CPython 3.13.18: **153 passed, 1 non-Linux skipped in 10.73s**.
+This includes the preserved foundation/storage/audience tests and 54 PDF
+cases, including packaged dependency discovery.
+
+Linux image was built using only root/scoped dependency manifests:
+
+```dockerfile
+FROM python:3.13-slim
+COPY backend /dependencies
+RUN pip install --no-cache-dir --quiet -r /dependencies/requirements-dev.txt
+```
+
+Run it from the deployed module root with the same restricted container flags:
+
+```sh
+docker run --rm --network none --read-only \
+  --tmpfs /tmp:rw,nosuid,noexec,size=256m --memory 1g --cpus 2 --pids-limit 64 \
+  --cap-drop ALL --security-opt no-new-privileges \
+  --mount type=bind,source="$PWD",target=/workspace,readonly \
+  --workdir /workspace/backend anki-pdf-issue9-pr-tests \
+  python -B -m pytest -o addopts= -q -o cache_dir=/tmp/pytest-cache
+```
+
+All ten original weakened contract copies remain rejected after deployment-root
+integration. `git diff --check` passed; the PR delta is only #9 extraction,
+two authorized backend tooling paths, PDF docs and pipeline-owned records.
+No incomplete-issue closing verb/reference is present; verified GitHub closing
+references are empty.
+
+The parser/license/result-contract details and **real Functions/Azure,
+concurrency and representative-document fidelity/performance gaps** above
+remain unchanged. No deployment, paid service, watcher, Agent merge or manual
+Anki/cloud verification was activated. The coordinator owns PR review/merge
+and acceptance decisions; final published head is reported from live GitHub.

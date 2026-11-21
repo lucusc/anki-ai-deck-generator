@@ -54,3 +54,9 @@
   mutations remain rejected. GitHub PR uses a non-closing #9 reference;
   parent reviews/merges serially. Real host/Azure/concurrency/fidelity gates
   remain explicitly unverified.
+
+- Opened https://github.com/lucusc/anki-ai-deck-generator/pull/53 after merging
+  reviewed `main` through PR #50 (`04e139a`). The live PR has no closing issue
+  references. Final default backend tests: Linux **153 passed / 1 skipped**,
+  macOS **148 passed / 6 skipped**. Handoff now includes PR-based integration
+  evidence; parent reviews/merges this issue-only delta.
