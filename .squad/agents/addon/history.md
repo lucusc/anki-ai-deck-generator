@@ -109,7 +109,9 @@
 - Real Anki 25.9 and 26.9.4 core temporary collections verify saved rendering
   after close/reopen, not Qt or application restart. A 25.9 same-millisecond
   deleted/recreated deck reused its numeric ID and identical public deck data;
-  the accepted ID-only contract cannot distinguish that case.
+  both cores deterministically restore identical public data via the sync/merge
+  API. The accepted ID-only contract cannot distinguish either case, and
+  desktop UI timing and likelihood have not been measured.
 - Contract proposal: addon-26-basic-import-contract.md; remaining release gates
   include stable deck lifetime, Qt/profile/undo verification and later review,
   duplicate-safe retry and acknowledgement integration.

@@ -35,11 +35,23 @@ missing/filtered ID fails rather than falling back to Default or another name.
 
 **Known identity limitation:** Anki 25.09 core was observed deleting and
 recreating a deck with the *same* numeric ID and identical public deck
-representation within one millisecond. An ID-only snapshot cannot distinguish
-that replacement, including when the name is reused. This is a prerequisite
-contract gap requiring a broader profile/deck-lifetime solution before claiming
-protection against every deletion/recreation race; this slice does not invent
-an unsupported deck identity or modify the selector.
+representation within one millisecond. Separately, a deterministic synthetic
+test on both core versions saves the public deck dictionary, removes the deck,
+and restores the identical dictionary with the public `decks.update(...,
+preserve_usn=True)` sync/merge API. The ID, full returned dictionary and result
+of ID-only revalidation are identical. These core experiments do not establish
+how frequently either situation occurs through the desktop UI. An ID/name or
+metadata fingerprint cannot prove incarnation continuity. This prerequisite
+contract gap requires a broader profile/deck-lifetime solution or an accepted
+fail-closed boundary; this slice does not invent an unsupported identity or
+modify the selector.
+
+The public [operation completion hook](https://github.com/ankitects/anki/blob/25.09/qt/tools/genhooks_gui.py)
+is a UI notification after an operation, not a proven fence for all writes.
+In particular, `CollectionOp` posts completion callbacks to the main thread,
+and a failed operation does not fire its success notification. Direct collection
+mutations, sync/import and lifecycle changes need separate consideration. Do
+not claim that hook-only invalidation protects every pending import.
 
 The mapper strips unsafe attributes and rejects unsupported/executable markup
 and Anki media/LaTeX syntax as described in [note-payload.md](note-payload.md).
@@ -85,14 +97,15 @@ PYTHONDONTWRITEBYTECODE=1 /tmp/anki-basic-26/bin/python -m unittest discover -s 
 Real Anki core checks use temporary synthetic collections. They save and close
 the collection, reopen it, inspect the saved fields/identity/deck, and render
 both card faces; they also check no model/note is created for unapproved input,
-rename preservation, and deletion/name reuse when IDs differ. Unit tests cover
+rename preservation, deletion/name reuse when IDs differ, and deterministic
+restoration of indistinguishable deck data. Unit tests cover
 approval types, invalid/unsupported notes, markup, collection mismatch,
 model-creation permissions, propagated errors and source mutations of the
 approval/family gates.
 
-On macOS with CPython 3.13, the complete add-on suite passed **80 tests** with
+On macOS with CPython 3.13, the complete add-on suite passed **81 tests** with
 each of Anki core 25.9 and 26.9.4 installed. The standard-library-only run passed
-80 tests with the two real-core checks skipped.
+81 tests with the three real-core checks skipped.
 
 These are **core-library** checks, not installed Anki/Qt desktop tests or a
 full application restart. Actual 25.09 and 26.09.4 Qt rendering, browser/reviewer

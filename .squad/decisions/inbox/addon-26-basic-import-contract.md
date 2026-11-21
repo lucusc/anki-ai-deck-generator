@@ -12,6 +12,9 @@ is a separate Anki write that can survive a failed insertion.
 **Why:** This isolates the current issue without implying review UI, atomic
 model+note writes or retry safety. Real Anki 25.09 core can reuse a deleted deck's
 numeric ID immediately, with an identical public deck representation. Numeric
-ID alone cannot distinguish that replacement; the parent must reconcile a
-broader stable-deck lifetime mechanism before accepting a complete identity
-guarantee. See `docs/basic-notes.md` for evidence and remaining gates.
+ID alone cannot distinguish that replacement. Both target core versions also
+deterministically restore an identical deck dictionary and ID using the public
+sync/merge API. Desktop timing/likelihood has not been measured. Post-operation
+UI hooks alone are not a proven fence for all writes. The parent must reconcile
+a broader stable-deck lifetime mechanism or explicit fail-closed boundary before
+accepting a complete identity guarantee. See `docs/basic-notes.md`.

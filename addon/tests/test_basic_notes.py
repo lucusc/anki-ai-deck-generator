@@ -17,6 +17,7 @@ from addon.models.note_payload import NoteMappingError
 from addon.services.basic_notes import (
     BasicImportError, capture_basic_target, import_approved_basic,
 )
+from addon.services.decks import revalidate_deck
 from addon.services.note_models import map_generated_note, model_name
 from test_note_models import SyntheticCollection, payload
 
@@ -259,6 +260,24 @@ class RealAnkiBasicImportTests(unittest.TestCase):
                 self.assertEqual(error.exception.code, "missing")
                 self.assertEqual(col.find_notes(""), [])
                 self.assertIsNone(col.models.by_name(model_name("basic")))
+            finally:
+                col.close()
+
+    def test_restored_deck_can_have_identical_id_and_public_metadata(self):
+        from anki.collection import Collection
+
+        with tempfile.TemporaryDirectory() as directory:
+            col = Collection(str(Path(directory) / "collection.anki2"))
+            try:
+                deck_id = col.decks.add_normal_deck_with_name("Synthetic target").id
+                target = capture_basic_target(col, DeckIdentity(deck_id, "Synthetic target"))
+                original = copy.deepcopy(col.decks.get(deck_id, default=False))
+                col.decks.remove([deck_id])
+                with self.assertRaises(DeckError):
+                    revalidate_deck(col, target.deck)
+                col.decks.update(copy.deepcopy(original), preserve_usn=True)
+                self.assertEqual(col.decks.get(deck_id, default=False), original)
+                self.assertEqual(revalidate_deck(col, target.deck), target.deck)
             finally:
                 col.close()
 
