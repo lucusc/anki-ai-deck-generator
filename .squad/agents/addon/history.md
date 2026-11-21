@@ -30,3 +30,22 @@
   Windows generic credential blobs have a 2560-byte ceiling.
 - Decision proposal: addon-1-foundation-auth-targets.md. Root README linking
   and shared decision/backlog reconciliation belong to the parent.
+
+### 2026-11-21 — Issue #3 deck selector
+
+- Own checkout/TEAM_ROOT with STATE_BACKEND=local. Dispatch dbde7a8 integrated
+  as 7d71133 before edits; branch renamed through the app to lucusc-deck-selector.
+- Single modeless Tools workflow now offers explicit normal-deck selection and
+  user-directed creation. Reads use QueryOp; writes use CollectionOp and the
+  supported add_normal_deck_with_name result. No upload/audience/import added.
+- Capture immutable numeric deck ID plus display-only name, revalidate inside
+  the future collection write, and never use a renamed/reused name or Default
+  fallback. Profile-local selection survives dialog reopen, not profile close.
+- Name components must reject whitespace/colon edges, empty components, controls
+  and quotes before Anki silently normalizes them; NFC normalization is explicit.
+  Duplicate checks include filtered names even though filtered targets are excluded.
+- Auth and deck operation controls gate each other; queued work checks a close
+  event before collection access and callbacks ignore closed windows. An already
+  running creation can commit after close and must not be silently deleted.
+- Contract proposal: addon-3-stable-deck-contract.md; docs/deck-selector.md records
+  API evidence and honest desktop/provider/undo gaps. Parent owns reconciliation.

@@ -77,6 +77,51 @@ class Widget:
     def addWidget(self, widget):
         pass
 
+    def setPlaceholderText(self, text):
+        self.placeholder = text
+
+
+class LineEdit(Widget):
+    def __init__(self, *args):
+        super().__init__(*args)
+        del self.text
+        self.value = ""
+
+    def text(self):
+        return self.value
+
+    def setText(self, text):
+        self.value = text
+
+    def clear(self):
+        self.value = ""
+
+
+class ComboBox(Widget):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.currentIndexChanged = Signal()
+        self.items = []
+        self.index = -1
+        self.blocked = False
+
+    def blockSignals(self, blocked):
+        self.blocked = blocked
+
+    def addItem(self, name, data):
+        self.items.append((name, data))
+        if self.index == -1:
+            self.setCurrentIndex(0)
+
+    def clear(self):
+        self.items.clear()
+        self.setCurrentIndex(-1)
+
+    def setCurrentIndex(self, index):
+        self.index = index
+        if not self.blocked:
+            self.currentIndexChanged.emit(index)
+
 
 class Menu:
     def __init__(self):
@@ -91,10 +136,11 @@ class Menu:
 
 class Query:
     pending = []
+    collection = None
 
     def __init__(self, *, parent, op, success):
         self.op = op
-        self.success = success
+        self.on_success = success
         self.no_collection = False
 
     def without_collection(self):
@@ -110,13 +156,22 @@ class Query:
 
     def finish(self):
         with ThreadPoolExecutor(max_workers=1) as pool:
-            future = pool.submit(self.op, None)
+            future = pool.submit(self.op, None if self.no_collection else self.collection)
             try:
                 result = future.result(timeout=3)
             except Exception as error:
                 self.on_failure(error)
             else:
-                self.success(result)
+                self.on_success(result)
+
+
+class CollectionQuery(Query):
+    def __init__(self, parent, op):
+        super().__init__(parent=parent, op=op, success=None)
+
+    def success(self, callback):
+        self.on_success = callback
+        return self
 
 
 class LoadTests(unittest.TestCase):
@@ -128,12 +183,15 @@ class LoadTests(unittest.TestCase):
             form=types.SimpleNamespace(menuTools=self.menu),
             addonManager=types.SimpleNamespace(getConfig=Mock(return_value=dict(CONFIG))),
             pm=types.SimpleNamespace(name="Synthetic profile"),
+            col=types.SimpleNamespace(decks=support.SyntheticDecks()),
         )
         self.version = types.ModuleType("anki.buildinfo")
         self.version.version = "25.09"
         qt = types.ModuleType("aqt.qt")
-        for name in ("QAction", "QDialog", "QLabel", "QPushButton", "QVBoxLayout"):
+        for name in ("QAction", "QDialog", "QLabel", "QPushButton", "QVBoxLayout", "QWidget"):
             setattr(qt, name, Widget)
+        qt.QLineEdit = LineEdit
+        qt.QComboBox = ComboBox
         qt.Qt = types.SimpleNamespace(
             WidgetAttribute=types.SimpleNamespace(WA_DeleteOnClose=1),
             TextFormat=types.SimpleNamespace(PlainText=1),
@@ -145,6 +203,7 @@ class LoadTests(unittest.TestCase):
         utils.showWarning = self.warning
         operations = types.ModuleType("aqt.operations")
         operations.QueryOp = Query
+        operations.CollectionOp = CollectionQuery
         self.modules = {
             "anki": types.ModuleType("anki"), "anki.buildinfo": self.version,
             "aqt": aqt, "aqt.qt": qt, "aqt.utils": utils, "aqt.operations": operations,
@@ -152,6 +211,7 @@ class LoadTests(unittest.TestCase):
         self.patcher = patch.dict(sys.modules, self.modules)
         self.patcher.start()
         Query.pending.clear()
+        Query.collection = self.mw.col
         self.packages = []
 
     def tearDown(self):
@@ -181,6 +241,7 @@ class LoadTests(unittest.TestCase):
                 self.assertIn("ui/signin.py", names)
                 self.assertIn("services/oauth.py", names)
                 self.assertIn("services/credentials.py", names)
+                self.assertTrue({"models/deck.py", "services/decks.py", "ui/decks.py"} <= names)
                 self.assertFalse(any(name.startswith(("tests/", "tools/")) for name in names))
                 self.assertEqual(json.loads(package.read("config.json"))["issuer"], "")
                 extracted = Path(directory) / "unpacked"
@@ -222,6 +283,9 @@ class LoadTests(unittest.TestCase):
         self.assertTrue(dialog.visible)
         self.menu.items[0].triggered.emit()
         self.assertIs(bootstrap._controller.dialog, dialog)
+        self.assertEqual(len(Query.pending), 1)
+        self.assertFalse(Query.pending[0].no_collection)
+        Query.pending.pop(0).finish()
         worker_threads = []
         dialog.session.sign_in = lambda: worker_threads.append(threading.get_ident())
         dialog.signin.clicked.emit()
@@ -246,6 +310,7 @@ class LoadTests(unittest.TestCase):
         self.menu.items[0].triggered.emit()
         bootstrap = sys.modules[self.packages[-1] + ".ui.bootstrap"]
         dialog = bootstrap._controller.dialog
+        Query.pending.pop(0).finish()
 
         def fail():
             raise RuntimeError("private-token-and-study-content")
@@ -269,6 +334,181 @@ class LoadTests(unittest.TestCase):
         self.load()
         self.assertIn("could not start", self.warning.call_args.args[0])
         self.assertNotIn("private", self.warning.call_args.args[0])
+
+    def open_ready(self):
+        _, bootstrap = self.load()
+        self.menu.items[0].triggered.emit()
+        dialog = bootstrap._controller.dialog
+        self.assertEqual(self.mw.col.decks.calls, [])
+        Query.pending.pop(0).finish()
+        return bootstrap, dialog
+
+    def test_deck_selection_rename_deletion_and_dialog_reopen_keep_stable_identity(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.decks
+        self.assertIsNone(bootstrap._controller.selection.target)
+        self.assertEqual(selector.combo.index, -1)
+        index = next(index for index, (_, did) in enumerate(selector.combo.items) if did == 101)
+        selector.combo.setCurrentIndex(index)
+        target = bootstrap._controller.selection.target
+        self.assertEqual(target.deck_id, 101)
+        self.assertFalse(any(call[0] == "create" for call in self.mw.col.decks.calls))
+        self.mw.col.decks.names[101] = "Synthetic renamed"
+        selector.refresh_button.clicked.emit()
+        Query.pending.pop(0).finish()
+        self.assertEqual(bootstrap._controller.selection.target.deck_id, target.deck_id)
+        self.assertEqual(bootstrap._controller.selection.target.name, "Synthetic renamed")
+        self.assertIn("renamed", selector.status.text)
+        self.assertEqual(selector.combo.items[selector.combo.index], ("Synthetic renamed", 101))
+        dialog.reject()
+        self.menu.items[0].triggered.emit()
+        reopened = bootstrap._controller.dialog
+        Query.pending.pop(0).finish()
+        self.assertIsNot(reopened, dialog)
+        self.assertEqual(reopened.decks.combo.items[reopened.decks.combo.index][1], 101)
+        del self.mw.col.decks.names[101]
+        self.mw.col.decks.names[404] = "Synthetic renamed"
+        reopened.decks.refresh_button.clicked.emit()
+        Query.pending.pop(0).finish()
+        self.assertEqual(reopened.decks.combo.index, -1)
+        self.assertEqual(bootstrap._controller.selection.target.deck_id, 101)
+        self.assertIn("deleted", reopened.decks.status.text)
+        self.assertIn("no fallback", reopened.decks.status.text)
+        self.hooks.profile_will_close[0]()
+        self.assertIsNone(bootstrap._controller.selection.target)
+
+    def test_user_directed_creation_runs_collection_op_and_validates_names(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.decks
+        self.mw.col.decks.calls.clear()
+        selector.name.setText("Invalid::")
+        selector.create_button.clicked.emit()
+        self.assertEqual(Query.pending, [])
+        self.assertEqual(self.mw.col.decks.calls, [])
+        self.assertIn("Enter a deck name", selector.status.text)
+        selector.name.setText("Synthetic::Chemistry")
+        self.assertEqual(Query.pending, [])
+        selector.create_button.clicked.emit()
+        self.assertTrue(selector.busy)
+        self.assertFalse(dialog.signin.enabled)
+        self.assertFalse(selector.create_button.enabled)
+        self.assertEqual(self.mw.col.decks.calls, [])
+        self.assertIsInstance(Query.pending[0], CollectionQuery)
+        self.assertFalse(Query.pending[0].no_collection)
+        dialog.signin.clicked.emit()
+        self.assertEqual(len(Query.pending), 1)
+        Query.pending.pop(0).finish()
+        self.assertEqual(self.mw.col.decks.calls,
+                         [("lookup", "Synthetic::Chemistry"), ("create", "Synthetic::Chemistry")])
+        self.assertEqual(bootstrap._controller.selection.target.deck_id, 304)
+        Query.pending.pop(0).finish()
+        self.assertEqual(selector.combo.items[selector.combo.index], ("Synthetic::Chemistry", 304))
+        self.assertEqual(selector.name.text(), "")
+        selector.name.setText("synthetic::chemistry")
+        selector.create_button.clicked.emit()
+        Query.pending.pop(0).finish()
+        self.assertIn("already exists", selector.status.text)
+        self.assertEqual(sum(call[0] == "create" for call in self.mw.col.decks.calls), 1)
+
+    def test_auth_worker_never_overlaps_selector_collection_dispatch(self):
+        _, dialog = self.open_ready()
+        selector = dialog.decks
+        self.mw.col.decks.calls.clear()
+        dialog.session.sign_in = Mock()
+        dialog.signin.clicked.emit()
+        self.assertFalse(selector.combo.enabled)
+        self.assertFalse(selector.create_button.enabled)
+        selector.refresh_button.clicked.emit()
+        selector.name.setText("Synthetic new deck")
+        selector.create_button.clicked.emit()
+        self.assertEqual(len(Query.pending), 1)
+        self.assertTrue(Query.pending[0].no_collection)
+        Query.pending.pop(0).finish()
+        dialog.session.sign_in.assert_called_once_with()
+        self.assertEqual(self.mw.col.decks.calls, [])
+        self.assertTrue(selector.create_button.enabled)
+        selector.refresh_button.clicked.emit()
+        Query.pending.pop(0).finish()
+        self.assertEqual(self.mw.col.decks.calls, [("list", False, False)])
+
+    def test_profile_close_cancels_queued_creation_and_late_read_callbacks(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.decks
+        selector.name.setText("Synthetic cancelled")
+        selector.create_button.clicked.emit()
+        self.mw.col.decks.calls.clear()
+        self.hooks.profile_will_close[0]()
+        status = selector.status.text
+        Query.pending.pop(0).finish()
+        self.assertEqual(self.mw.col.decks.calls, [])
+        self.assertEqual(selector.status.text, status)
+        self.assertIsNone(bootstrap._controller.selection.target)
+        self.assertTrue(dialog.session.cancel.is_set())
+        self.menu.items[0].triggered.emit()
+        reopened = bootstrap._controller.dialog
+        operation = Query.pending.pop(0)
+        operation.op = lambda collection: [types.SimpleNamespace(deck_id=101, name="Synthetic late")]
+        self.hooks.profile_will_close[0]()
+        operation.finish()
+        self.assertEqual(reopened.decks.combo.items, [])
+        self.assertIsNone(bootstrap._controller.selection.target)
+
+    def test_collection_failure_is_content_free_and_controls_recover(self):
+        _, dialog = self.open_ready()
+        self.mw.col.decks.all_names_and_ids = Mock(
+            side_effect=RuntimeError("private deck name and study content")
+        )
+        with self.assertLogs("anki_ai_deck_generator", level="INFO") as logs:
+            dialog.decks.refresh_button.clicked.emit()
+            Query.pending.pop(0).finish()
+        self.assertIn("error code internal", dialog.decks.status.text)
+        self.assertNotIn("private", dialog.decks.status.text)
+        self.assertNotIn("private", " ".join(logs.output))
+        self.assertFalse(dialog.decks.busy)
+        self.assertTrue(dialog.signin.enabled)
+        self.assertTrue(dialog.decks.refresh_button.enabled)
+
+    def test_close_during_started_creation_keeps_committed_deck_but_ignores_selection(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.decks
+        selector.name.setText("Synthetic committed")
+        selector.create_button.clicked.emit()
+        original = self.mw.col.decks.add_normal_deck_with_name
+
+        def close_during_write(name):
+            selector.close_selector()
+            return original(name)
+
+        self.mw.col.decks.add_normal_deck_with_name = close_during_write
+        Query.pending.pop(0).finish()
+        self.assertIn("Synthetic committed", self.mw.col.decks.names.values())
+        self.assertIsNone(bootstrap._controller.selection.target)
+        self.assertEqual(Query.pending, [])
+        dialog.closeEvent(None)
+        self.assertFalse(dialog.active)
+        self.assertTrue(dialog.session.cancel.is_set())
+
+    def test_packaged_selector_workflow_on_both_target_api_doubles(self):
+        with tempfile.TemporaryDirectory() as directory:
+            archive = Path(directory) / "selector.ankiaddon"
+            support.load_build().build(archive)
+            extracted = Path(directory) / "unpacked"
+            with ZipFile(archive) as package:
+                package.extractall(extracted)
+            for version in ("25.09", "26.09.4"):
+                with self.subTest(version=version):
+                    self.version.version = version
+                    self.menu.items.clear()
+                    self.hooks.profile_will_close.clear()
+                    _, bootstrap = self.load(extracted)
+                    self.menu.items[0].triggered.emit()
+                    dialog = bootstrap._controller.dialog
+                    Query.pending.pop(0).finish()
+                    self.assertEqual(len(self.menu.items), 1)
+                    self.assertEqual({did for _, did in dialog.decks.combo.items}, {1, 101, 202})
+                    dialog.decks.combo.setCurrentIndex(1)
+                    self.assertEqual(bootstrap._controller.selection.target.deck_id, 101)
+                    self.hooks.profile_will_close[0]()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 from ..models.auth import AddonError, OAuthConfig
+from ..models.deck import DeckSelection
 from ..services.privacy import event
 
 TARGET_VERSIONS = {"25.09", "26.09.4"}
@@ -25,6 +26,9 @@ def install(package_name: str) -> None:
         class Controller:
             dialog = None
 
+            def __init__(self):
+                self.selection = DeckSelection()
+
             def open(self):
                 try:
                     if version not in TARGET_VERSIONS:
@@ -33,11 +37,12 @@ def install(package_name: str) -> None:
                         self.dialog.show()
                         self.dialog.raise_()
                         self.dialog.activateWindow()
+                        self.dialog.decks.refresh()
                         return
                     config = OAuthConfig.from_mapping(mw.addonManager.getConfig(package_name))
                     from .signin import SignInDialog
 
-                    self.dialog = SignInDialog(mw, config, mw.pm.name)
+                    self.dialog = SignInDialog(mw, config, mw.pm.name, self.selection)
                     self.dialog.show()
                 except Exception as error:
                     safe = error if isinstance(error, AddonError) else AddonError("internal")
@@ -49,6 +54,7 @@ def install(package_name: str) -> None:
                     if self.dialog.active:
                         self.dialog.reject()
                     self.dialog = None
+                self.selection.target = None
 
         _controller = Controller()
         qconnect(action.triggered, lambda checked=False: _controller.open())
