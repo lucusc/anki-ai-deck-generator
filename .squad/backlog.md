@@ -3,7 +3,8 @@
 Canonical Squad offline backlog (`templates/prd-intake.md`); requirements remain
 the live [GitHub issues](https://github.com/lucusc/anki-ai-deck-generator/issues).
 Snapshot: 2026-11-21 UTC, all 48 issues open; all acceptance criteria and appended
-OAuth/temporary-retention requirements reviewed. No application work started.
+OAuth/temporary-retention requirements reviewed. Foundation dispatches recorded;
+no application implementation accepted yet.
 
 ## Dependency-ready V1 waves
 
@@ -39,12 +40,12 @@ on the listed prerequisites; completion requires the full issue acceptance.
 
 | Issue | Title | Direct prerequisites | Route | Wave | State | Active claim |
 |-------|-------|----------------------|-------|------|-------|--------------|
-| #1 | Create Anki add-on project structure | None | addon | 0 | ready | unclaimed |
+| #1 | Create Anki add-on project structure | None | addon | 0 | assigned | addon foundation; session/branch appended to dispatch log |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
 | #3 | Implement deck selector | #1 | addon | 1 | blocked | unclaimed |
 | #4 | Implement audience selector | #1 | addon | 1 | blocked | unclaimed |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
-| #6 | Create Azure Function project | None | functions | 0 | ready | unclaimed |
+| #6 | Create Azure Function project | None | functions | 0 | assigned | functions foundation; session/branch appended to dispatch log |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
 | #8 | Implement card generation endpoint | #7, #9, #16, #17 | functions | 6 | blocked | unclaimed |
 | #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | blocked | unclaimed |

@@ -60,6 +60,25 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Foundation parallel-write boundaries
+
+**Owner:** parent coordinator / lead. #1 owns `addon/` and
+`docs/addon-development.md`; #6 owns `backend/` and
+`docs/backend-development.md`. Each owns only its member history and uniquely
+named decision/handoff records. Root README, root tooling, shared decisions and
+backlog changes are reconciled by the parent, not parallel writers.
+
+Both foundations use a deployment-configured OAuth public client and API
+audience, never shared secrets. The add-on obtains access tokens through browser
+authorization code with PKCE and protected refresh storage; the backend must
+validate access-token issuer, signature, audience, lifetime and user identity,
+or a documented trusted hosting authentication boundary. No unverified
+identity headers are trusted in an exposed local endpoint. Backend contracts
+are not accepted merely because a sibling proposed them. A public health route
+returns only operational health, never configuration, credentials or content.
+Upload/job payloads belong to dependent issues and require an accepted shared
+contract before their parallel implementation.
+
 Record proposed changes in `decisions/inbox/{member}-{slug}.md`; the parent
 coordinator consolidates accepted decisions and integrates child histories/logs.
 Issue acceptance criteria and explicit user scope cannot be weakened by a
