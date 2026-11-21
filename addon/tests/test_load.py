@@ -122,6 +122,9 @@ class ComboBox(Widget):
         if not self.blocked:
             self.currentIndexChanged.emit(index)
 
+    def itemData(self, index):
+        return self.items[index][1] if 0 <= index < len(self.items) else None
+
 
 class Menu:
     def __init__(self):
@@ -242,6 +245,7 @@ class LoadTests(unittest.TestCase):
                 self.assertIn("services/oauth.py", names)
                 self.assertIn("services/credentials.py", names)
                 self.assertTrue({"models/deck.py", "services/decks.py", "ui/decks.py"} <= names)
+                self.assertTrue({"models/audience.py", "ui/audience.py"} <= names)
                 self.assertFalse(any(name.startswith(("tests/", "tools/")) for name in names))
                 self.assertEqual(json.loads(package.read("config.json"))["issuer"], "")
                 extracted = Path(directory) / "unpacked"
@@ -508,6 +512,127 @@ class LoadTests(unittest.TestCase):
                     self.assertEqual({did for _, did in dialog.decks.combo.items}, {1, 101, 202})
                     dialog.decks.combo.setCurrentIndex(1)
                     self.assertEqual(bootstrap._controller.selection.target.deck_id, 101)
+                    self.hooks.profile_will_close[0]()
+
+    def test_audience_requires_explicit_choice_and_snapshot_survives_ui_changes(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.audience
+        contract = sys.modules[self.packages[-1] + ".models.audience"]
+        self.assertEqual(selector.combo.index, -1)
+        self.assertEqual(selector.combo.items, [
+            ("Middle School", "middle_school"), ("High School", "high_school"),
+            ("University", "university"), ("Certification", "certification"),
+            ("Professional", "professional"),
+        ])
+        with self.assertRaises(contract.AudienceError) as error:
+            selector.capture_settings()
+        self.assertEqual(error.exception.code, "missing")
+        self.mw.col.decks.calls.clear()
+        for index, (label, wire) in enumerate(selector.combo.items):
+            selector.combo.setCurrentIndex(index)
+            snapshot = selector.capture_settings()
+            self.assertEqual(snapshot.to_mapping(), {"audience": wire})
+            self.assertEqual(selector.status.text, "Audience: " + label)
+        captured = selector.capture_settings()
+        dialog.decks.combo.setCurrentIndex(1)
+        target = bootstrap._controller.selection.target
+        selector.combo.setCurrentIndex(0)
+        self.assertEqual(captured.to_mapping(), {"audience": "professional"})
+        self.assertEqual(captured.review_label, "Audience: Professional")
+        self.assertEqual(selector.capture_settings().to_mapping(), {"audience": "middle_school"})
+        self.assertEqual(bootstrap._controller.selection.target, target)
+        self.assertEqual(Query.pending, [])
+        self.assertEqual(self.mw.col.decks.calls, [])
+        selector.combo.items.append(("Private invalid value", "private-study-content"))
+        selector.combo.setCurrentIndex(5)
+        self.assertNotIn("private", selector.status.text)
+        with self.assertRaises(contract.AudienceError):
+            selector.capture_settings()
+        self.assertIsNone(bootstrap._controller.audience_selection.settings)
+        selector.combo.setCurrentIndex(2)
+        selector.combo.setCurrentIndex(-1)
+        with self.assertRaises(contract.AudienceError):
+            selector.capture_settings()
+
+    def test_audience_lifetime_reopen_profile_close_and_closed_callbacks(self):
+        bootstrap, dialog = self.open_ready()
+        selector = dialog.audience
+        contract = sys.modules[self.packages[-1] + ".models.audience"]
+        selector.combo.setCurrentIndex(2)
+        captured = selector.capture_settings()
+        dialog.reject()
+        self.assertFalse(selector.combo.enabled)
+        selector.select(4)
+        with self.assertRaises(contract.AudienceError) as error:
+            selector.capture_settings()
+        self.assertEqual(error.exception.code, "closed")
+        self.menu.items[0].triggered.emit()
+        reopened = bootstrap._controller.dialog
+        Query.pending.pop(0).finish()
+        self.assertEqual(reopened.audience.combo.index, 2)
+        self.assertEqual(reopened.audience.status.text, "Audience: University")
+        self.hooks.profile_will_close[0]()
+        self.assertIsNone(bootstrap._controller.audience_selection.settings)
+        reopened.audience.select(4)
+        self.assertIsNone(bootstrap._controller.audience_selection.settings)
+        self.assertEqual(captured.review_label, "Audience: University")
+        self.menu.items[0].triggered.emit()
+        self.assertEqual(bootstrap._controller.dialog.audience.combo.index, -1)
+        Query.pending.pop(0).finish()
+
+    def test_audience_controls_follow_existing_auth_and_deck_busy_lifecycle(self):
+        _, bootstrap = self.load()
+        self.menu.items[0].triggered.emit()
+        dialog = bootstrap._controller.dialog
+        self.assertFalse(dialog.audience.combo.enabled)
+        dialog.audience.select(2)
+        self.assertIsNone(bootstrap._controller.audience_selection.settings)
+        Query.pending.pop(0).finish()
+        self.assertTrue(dialog.audience.combo.enabled)
+        dialog.audience.combo.setCurrentIndex(2)
+        captured = dialog.audience.capture_settings()
+        dialog.session.sign_in = Mock(side_effect=RuntimeError("private-auth-error"))
+        dialog.signin.clicked.emit()
+        self.assertFalse(dialog.audience.combo.enabled)
+        dialog.audience.select(0)
+        self.assertEqual(dialog.audience.capture_settings(), captured)
+        Query.pending.pop(0).finish()
+        self.assertTrue(dialog.audience.combo.enabled)
+        dialog.session.sign_in = Mock()
+        dialog.signin.clicked.emit()
+        Query.pending.pop(0).finish()
+        self.assertTrue(dialog.audience.combo.enabled)
+        self.mw.col.decks.all_names_and_ids = Mock(side_effect=RuntimeError("private-deck"))
+        dialog.decks.refresh_button.clicked.emit()
+        self.assertFalse(dialog.audience.combo.enabled)
+        Query.pending.pop(0).finish()
+        self.assertTrue(dialog.audience.combo.enabled)
+        dialog.closeEvent(None)
+        self.assertFalse(dialog.audience.combo.enabled)
+        self.assertTrue(dialog.audience.closed)
+
+    def test_packaged_audience_workflow_on_both_target_api_doubles(self):
+        with tempfile.TemporaryDirectory() as directory:
+            archive = Path(directory) / "audience.ankiaddon"
+            support.load_build().build(archive)
+            extracted = Path(directory) / "unpacked"
+            with ZipFile(archive) as package:
+                package.extractall(extracted)
+            for version in ("25.09", "26.09.4"):
+                with self.subTest(version=version):
+                    self.version.version = version
+                    self.menu.items.clear()
+                    self.hooks.profile_will_close.clear()
+                    _, bootstrap = self.load(extracted)
+                    self.menu.items[0].triggered.emit()
+                    dialog = bootstrap._controller.dialog
+                    Query.pending.pop(0).finish()
+                    self.assertEqual(len(self.menu.items), 1)
+                    self.assertEqual(dialog.audience.combo.index, -1)
+                    dialog.audience.combo.setCurrentIndex(3)
+                    self.assertEqual(dialog.audience.capture_settings().to_mapping(),
+                                     {"audience": "certification"})
+                    self.assertEqual(dialog.audience.status.text, "Audience: Certification")
                     self.hooks.profile_will_close[0]()
 
 
