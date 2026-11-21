@@ -1,0 +1,6 @@
+{
+  "issuer": "",
+  "client_id": "",
+  "audience": "",
+  "scopes": ["openid", "offline_access"]
+}

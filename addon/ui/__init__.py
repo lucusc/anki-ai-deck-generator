@@ -1,0 +1,1 @@
+"""Modeless Anki desktop UI."""
