@@ -1,0 +1,9 @@
+# Squad: ignore transient runtime state; ownership logs and decision inbox are versioned.
+# Note: .squad/casting/* is identity and MUST be committed to main, not ignored
+.squad/log/
+.squad/sessions/
+.squad/.scratch/
+.squad/.cache/
+# Squad: SubSquad activation file (local to this machine)
+.squad-workstream
+.copilot/
