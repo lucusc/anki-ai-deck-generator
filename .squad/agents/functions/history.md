@@ -69,3 +69,38 @@
   retention/deletion service was exercised. No Blob operations, root manifests,
   HTTP/auth changes, quotas, hash algorithms, deployment, paid/GitHub writes or
   nested agents. Stop after committed handoff; parent reconciles dependencies.
+
+### 2026-11-21 — Issue #18 temporary Blob implementation
+
+- Accountable session `85ee0d0b-3280-4230-b3a1-b07e207c2535`; own checkout as
+  TEAM_ROOT/WORKTREE_PATH with STATE_BACKEND local. Parent accepted-contract
+  identity commit `fa76f4e` integrated locally as `2ab351f` before edits.
+  App-managed branch is `lucusc-blob-storage-retention`.
+- Keep the accepted locator and physical Table. Artifact rows and the bounded
+  retention cursor contain only operational identity/fences, never study content,
+  SAS or display metadata. Payloads are immutable single PUTs, at most 16 MiB;
+  actual total upload/expansion quotas remain assigned to their consumers.
+- Ordinary write SAS cannot be made to require application If-Match/lease
+  discipline. Use only single-blob read SAS, at most five minutes; future upload
+  code mediates authenticated server bytes. Missing leased blobs reject later
+  leased/conditional payload PUTs; delete without a stale ETag removes earlier
+  winning writes. Do not release a lease before deleting its content.
+- Empty placeholder create plus infinite lease must both acknowledge before any
+  content write is possible. Ambiguous initialization remains a tracked drain
+  blocker; neither elapsed timeout nor a HEAD response proves request settlement.
+  Azure's ten-minutes-per-MiB write exception invalidates naive thirty-second
+  drain assumptions. Real streaming write/delete races remain unverified.
+- Blob data-plane get_service_properties omits versioning/restore settings in the
+  pinned SDK; use real ARM management policy reads and scoped management Reader
+  actions, not nonexistent dictionary properties or a fake-only policy check.
+  Retained versions/deleted copies are detected before base deletion; snapshot
+  inclusion does not delete retained versions.
+- A bounded deployment-controlled user inventory and conditional physical purge
+  are wired to an inert-by-default monitored timer. Persist continuation,
+  start cleanup one hour early, report overdue cycles/outages/pending drain,
+  and keep failed guards. This is not unconditional physical thirty-day
+  compliance through unavailable storage or an unresolved initializer.
+- No nested agent/session, host, service, watcher, deployment or paid calls.
+  User-directed PR reconciliation superseded the original no-PR handoff via
+  the parent message; merge current origin/main before opening the issue-only
+  PR, preserve canonical ownership, and use only non-closing issue references.
