@@ -7,6 +7,10 @@
 
 ## Learnings
 
+- 2026-11-21: Reviewed #3 and integrated `acf2549`/`160605a`; all 45 add-on
+  tests pass. Accepted immutable numeric deck identity with explicit revalidation.
+  #4 UI and #25 isolated note-mapping modules can now proceed in parallel.
+
 - 2026-11-21: Reviewed #21 and integrated `56a2a09`/`e9791de`; 77 backend
   tests pass after aligning tests/default runner with the Functions module root.
   Accept physical single-table fencing layout, but keep physical-retention and

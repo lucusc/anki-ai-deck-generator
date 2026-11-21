@@ -1,8 +1,10 @@
 # Anki add-on foundation (#1)
 
-The foundation provides a Tools menu entry, modeless browser sign-in, token
-refresh and local sign-out. It does **not** upload documents, select decks or
-audiences, generate notes, or write to the collection. Those are separate issues.
+The #1 foundation provides a Tools menu entry, modeless browser sign-in, token
+refresh and local sign-out. The integrated [#3 deck selector](deck-selector.md)
+also lists normal decks and creates a deck only on explicit user action.
+It does **not** upload documents, select audiences, generate notes, or import
+notes. Those are separate issues.
 Squad remains development tooling, not a runtime dependency.
 
 ## Desktop version targets and evidence

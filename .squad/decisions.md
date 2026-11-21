@@ -60,6 +60,30 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Deck identity and next disjoint add-on scopes
+
+**Owner:** parent coordinator / lead. #3 integrated as `acf2549`/`160605a`;
+parent reviewed deck/API/UI behavior and reran all 45 add-on tests. Accept
+immutable numeric `DeckIdentity` with profile-local selection and explicit
+rename/deletion revalidation. Capture and revalidate the same ID within the
+serialized collection operation immediately before later import; never resolve
+by a reused name or default fallback. Filtered decks are not import targets.
+Actual desktop/undo checks remain unverified.
+
+#4 owns audience UI wiring, dedicated client models and a dedicated server
+validator under `backend/contracts/`, without touching auth/retention routes.
+The audience contract is required field `audience`, exact wire values
+`middle_school`, `high_school`, `university`, `certification`, `professional`,
+with corresponding product labels. Unknown or missing values fail validation,
+not default/alias coercion. Capture immutable job/review settings so later
+UI changes do not alter an accepted request's audience. Actual job/review HTTP
+integration is not invented before #7/#8/#5.
+
+#25 owns dedicated note payload/model-mapping/markup modules and tests, not
+existing Tools/sign-in/deck/audience modules. It proposes the typed versioned
+note contract for later backend generation; root manifests, shared docs/state
+and runtime import/generation endpoints remain outside its scope.
+
 ### 2026-11-21 — Accepted Table schema with unresolved integration gates
 
 **Owner:** parent coordinator / lead. #21 feature/handoff integrated as
