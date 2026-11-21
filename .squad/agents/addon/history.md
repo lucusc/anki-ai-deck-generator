@@ -117,3 +117,35 @@
   recorded in addon-26-basic-import-contract.md. Remaining release gaps include
   Qt/profile/undo verification and later review, duplicate-safe retry and
   acknowledgement integration.
+
+### 2026-11-21 — Issue #27 Basic and reversed import
+
+- Own TEAM_ROOT/WORKTREE_PATH, STATE_BACKEND=local. Clean fast-forward to
+  integrated dispatch 2807a521 verified before edits; app-renamed branch
+  lucusc-reversed-note-import, original assignment identity retained.
+- New scoped helper reuses Basic's captured numeric target and private immutable
+  payload snapshot; Basic API/behavior is unchanged. Strict existing reversed
+  managed model is used without modifying customized built-ins/templates.
+- Required exact nonnegative integer remaining_cards rejects booleans and
+  insufficient new-card budgets before model/note writes. Report one saved note,
+  two actual saved cards, and separate added counts. Matching zero-budget retry
+  retains the same note/card IDs and adds zero cards.
+- Canonical Import ID lookup is collection-wide and exact-value verified:
+  ambiguous UUID, another family/model, differing sanitized fields/provenance,
+  destination or missing cards fail without new insertion. No concept hashes,
+  generic #24 dedup, UI, backend acknowledgement or budget ledger added.
+- Real cores both generate one Reverse for an empty Front but two cards with
+  visually blank Forward for b-empty/NBSP/U+200B fields when bypassing import.
+  Existing mapper rejects the HTML/NBSP cases; scoped reversed rendering gate
+  additionally rejects literal/entity U+200B-only questions. Visible mixed
+  controls and ZWJ emoji remain unchanged. Adjacent Basic invisible-Unicode
+  gap remains pre-existing and deliberately unmodified per parent direction.
+- 27 focused Basic/reversed tests and all 97 add-on tests pass on both real
+  Anki 25.9 and 26.9.4 with CPython 3.13.9/macOS. Standard-library CPython 3.14
+  passes 97 with 16 explicit core skips. Tests inspect saved cards/faces after
+  close/reopen, preserved custom built-ins, managed collision rejection,
+  lost post-commit acknowledgement reconciliation and budget/retry mutations.
+- Core rendering is not Qt desktop/profile/cancellation/undo/application restart,
+  full review-count display/batch-budget recovery or backend commit/retention
+  integration. Logical numeric target limitation remains accepted. Proposal:
+  addon-27-reversed-import-contract.md; handoff stops at parent review.

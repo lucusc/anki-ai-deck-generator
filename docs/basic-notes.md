@@ -6,6 +6,11 @@ the existing version-1 mapper, formatting rules and isolated managed model.
 It does not import reversed/cloze notes, implement duplicate detection or send
 backend acknowledgements.
 
+The separate [Basic and reversed helper](reversed-notes.md) adds explicit
+two-card budgets and logical import-ID retry reconciliation for that family.
+Basic's API and behavior remain unchanged; only the private immutable payload
+snapshot helper is shared. Basic does not inherit those budgets/retry checks.
+
 ## Proposed caller contract
 
 `capture_basic_target(collection, selected_deck)` captures and revalidates the
@@ -78,6 +83,14 @@ does **not** check it. Repeating an approved call can insert another note.
 Do not use it as a retry-safe integration until #24 and the review/import
 workflow provide that check, partial-failure recovery and acknowledgement.
 Existing local originals and imported collection data are never deleted here.
+
+The #27 actual-core investigation found the existing mapper accepts invisible
+Unicode-format-only content such as U+200B and Basic consequently saves a card
+with an invisible question. Empty HTML and NBSP-only text already fail mapping;
+stripped hidden attributes with visible text render normally. #27 gates visible
+questions only in its scoped reversed helper, preserving mixed format controls
+and ZWJ emoji. The adjacent Basic gap remains a separately scoped repair, not
+silently changed Basic behavior or a claim of complete pedagogical validation.
 
 ## Verification and release gaps
 

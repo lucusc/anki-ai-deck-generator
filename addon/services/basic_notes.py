@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from ..models.deck import DeckError, DeckIdentity
-from ..models.note_payload import BasicFields, NoteMappingError, parse_generated_note
+from ..models.note_payload import BasicFields, GeneratedNote, NoteMappingError, parse_generated_note
 from .decks import revalidate_deck
 from .note_models import map_generated_note
 
@@ -61,6 +61,26 @@ def capture_basic_target(collection: Collection, target: DeckIdentity | None) ->
     return BasicImportTarget(collection, revalidate_deck(collection, target))
 
 
+def _basic_snapshot(payload: GeneratedNote) -> dict[str, object]:
+    if not isinstance(payload.fields, BasicFields):
+        raise NoteMappingError("payload", "fields")
+    source = payload.source
+    return {
+        "schema_version": payload.schema_version,
+        "model_family": payload.model_family,
+        "import_id": payload.import_id,
+        "fields": {"Front": payload.fields.front, "Back": payload.fields.back},
+        "source": {
+            "document_id": source.document_id,
+            "sha256": source.sha256,
+            "name": source.name,
+            "location": {"page": source.page, "slide": source.slide, "section": source.section},
+        },
+        "prompt_version": payload.prompt_version,
+        "model_version": payload.model_version,
+    }
+
+
 def import_approved_basic(
     collection: Collection,
     value: object,
@@ -81,21 +101,7 @@ def import_approved_basic(
         raise BasicImportError("lifetime")
     _validate_target(target.deck)
 
-    source = payload.source
-    snapshot = {
-        "schema_version": payload.schema_version,
-        "model_family": payload.model_family,
-        "import_id": payload.import_id,
-        "fields": {"Front": payload.fields.front, "Back": payload.fields.back},
-        "source": {
-            "document_id": source.document_id,
-            "sha256": source.sha256,
-            "name": source.name,
-            "location": {"page": source.page, "slide": source.slide, "section": source.section},
-        },
-        "prompt_version": payload.prompt_version,
-        "model_version": payload.model_version,
-    }
+    snapshot = _basic_snapshot(payload)
     mapped = map_generated_note(collection, snapshot, target.deck, create_model=create_model)
     note_changes = collection.add_note(mapped.note, mapped.deck.deck_id)
     if mapped.model_changes is not None:
