@@ -60,6 +60,38 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Logical Anki identity, not an incarnation guarantee
+
+**Owner:** parent coordinator / lead. Retain the accepted Anki numeric-ID
+targeting workflow and document its limitation. Supported-core tests on both
+25.09 and 26.09.4 can delete and restore an identical deck dictionary with the
+same ID using the public sync/merge API. No documented immutable incarnation
+token was found; a metadata fingerprint or asynchronous UI hook is not proof.
+Automatic same-millisecond ID reuse was also observed in 25.09 core, but its
+real-UI likelihood has not been measured.
+
+#26 must still capture/revalidate the same numeric target in the serialized
+collection operation, reject missing/filtered targets, preserve explicit rename
+handling and never fall back by name/Default. This contract does not distinguish
+an indistinguishable same-ID restoration/recreation. Do not disable existing-deck
+import or substitute create-new-only behavior for this unobservable guarantee.
+Record the deterministic limitation and outstanding real-desktop verification.
+
+### 2026-11-21 — Reviewed private storage component, recovery still gated
+
+**Owner:** parent coordinator / lead. Reviewed PR #55 at `bf5eab3`, tested the
+combined backend with patched dependencies (192 passed, six existing Linux-only
+skips), and merged as `ef9ffe5`. Accept server-mediated leased single conditional
+PUTs, read-only five-minute review SAS, physical lease deletion before inventory
+removal, remaining-artifact finalization checks and bounded monitored paging.
+
+Unknown initializer/request settlement has no automatic recovery protocol.
+Keep the deleting guard on ambiguity; no elapsed-time/HEAD drain claim.
+Actual Azure streaming/deletion, policy/RBAC, complete inventory, timer/monitoring
+and deadline recovery remain unverified. #18/#21 remain open, and dependent
+upload/hash APIs are not dispatched on a full-retention claim. The timer remains
+disabled; no deployment, paid service or local-file/media deletion is enabled.
+
 ### 2026-11-21 — New-session model routing
 
 **Owner:** parent coordinator / lead. The user requested Fusion routing for new

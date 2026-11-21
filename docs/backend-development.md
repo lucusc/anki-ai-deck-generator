@@ -59,6 +59,12 @@ is replaced only in tests. Tests never call an identity provider, Azure storage
 or AI. Pinned direct dependencies live in `requirements*.txt`; transitive
 dependencies are not locked yet.
 
+The reviewed foundation pins now use `PyJWT[crypto]==2.15.0` and
+`pytest==9.0.3`, replacing versions with known dependency advisories. Reinstall
+from `requirements-dev.txt` when updating an existing test environment; the
+RS256 trust boundary is unchanged. Dependency remediation does not certify
+provider, Functions-host or deployed Azure behavior.
+
 ## Optional local Functions host
 
 Install [Core Tools v4](https://learn.microsoft.com/azure/azure-functions/functions-run-local)
