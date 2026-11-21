@@ -75,3 +75,13 @@ remain open. No deployment, paid calls, nested agents/sessions or watchers.
 
 This record reports offline #25 mapping evidence, not issue closure or V1
 certification. Parent owns acceptance, shared-state reconciliation and PR merge.
+
+## Post-publication main synchronization
+
+Parent requested synchronization after audience PR #50 landed. Merged main
+`04e139ab4814fe30242da616c39d5a3c9e559944` as
+`d416f465f3fbb98275d112e5b8287305dcb063b3`, preserving both add-on histories
+and main's audience implementation. No mapper/runtime edits were needed.
+All **70** integrated add-on tests pass; `git diff --check` passes.
+PR #52 remains non-closing with explicit real-Anki/integration evidence gaps.
+Earlier 16 focused/61 regression results above describe the pre-audience base.

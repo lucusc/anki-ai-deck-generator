@@ -72,6 +72,9 @@
   proposal for parent/lead acceptance, not an implemented generation endpoint.
   Anki 25.09/26.09.4 public APIs inspected; real desktop saved rendering/browser
   views/restart/undo/persistence/Qt and backend/import integration remain open.
+- Post-publication parent main sync: audience PR #50 main 04e139a merged as
+  d416f46, preserving both histories. All 70 integrated add-on tests pass;
+  PR #52 retains non-closing wording and unchanged acceptance gaps.
 ### 2026-11-21 — Issue #4 audience selector
 
 - Own checkout/TEAM_ROOT with STATE_BACKEND=local; dispatch identity 53116c8
