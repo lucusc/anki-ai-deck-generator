@@ -207,6 +207,8 @@ def _find_headings(lines: list[str]) -> tuple[dict[int, tuple[int, str]], set[in
         if atx:
             title = atx.group(2) or ""
             title = _CLOSING_ATX.sub("", title).strip()
+            if not title.strip("# \t"):
+                title = ""
             headings[index] = (len(atx.group(1)), title)
             continue
 
@@ -217,6 +219,7 @@ def _find_headings(lines: list[str]) -> tuple[dict[int, tuple[int, str]], set[in
             and previous >= 0
             and lines[previous].strip()
             and previous not in headings
+            and previous not in setext_underlines
             and previous not in fence_boundaries
         ):
             title = lines[previous].strip()

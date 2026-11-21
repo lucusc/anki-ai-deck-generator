@@ -48,6 +48,14 @@ def test_markdown_preserves_nested_headings_and_source_lines():
     ]
 
 
+def test_atx_heading_with_only_closing_hashes_has_an_empty_title():
+    result = extract_markdown(b"# ###")
+    assert result.outcome == TextOutcome.OK
+    assert len(result.sections) == 1
+    assert result.sections[0].headings == ("",)
+    assert (result.sections[0].line_start, result.sections[0].line_end) == (1, 1)
+
+
 def test_markdown_supports_setext_headings_and_literal_fenced_examples():
     result = extract_markdown(
         b"Topic\n=====\nText\n\n```md\n# not a heading\n```\n"
@@ -66,6 +74,25 @@ def test_markdown_supports_setext_headings_and_literal_fenced_examples():
         ),
         (("Topic", "Child"), 8, 10, "More"),
     ]
+
+
+def test_consumed_setext_underline_is_not_reinterpreted_as_a_heading():
+    exact = extract_markdown(
+        b"Title\n---\n---",
+        TextLimits(max_output_characters=8),
+    )
+    exceeded = extract_markdown(
+        b"Title\n---\n---",
+        TextLimits(max_output_characters=7),
+    )
+    assert exact.outcome == TextOutcome.OK
+    assert [
+        (section.headings, section.line_start, section.line_end, section.text)
+        for section in exact.sections
+    ] == [(("Title",), 1, 3, "---")]
+    assert exceeded.outcome == TextOutcome.RESOURCE_LIMIT
+    assert exceeded.reason == "output_characters"
+    assert exceeded.sections == ()
 
 
 def test_horizontal_rule_after_fenced_code_is_not_a_setext_heading():
