@@ -36,3 +36,21 @@
 - Real Functions subprocess/OS-limit availability, concurrent-instance headroom
   and representative document fidelity/performance are pending, not inferred
   from local container tests.
+
+### 2026-11-21 - User-directed #9 GitHub PR integration
+
+- Coordinator confirmed bootstrap PR #49 merged at `2225894`; merged that
+  `origin/main` ancestry into this branch and kept main's canonical #21 backlog
+  status rather than resurrecting the stale child assignment.
+- Explicit scope extension covers backend root dependency/discovery tooling.
+  Included extraction requirements and tests without changing foundation/auth/
+  worker or storage behavior. Current tests/docs use `extraction` from the
+  deployed backend root, not a duplicate `backend.extraction` module identity.
+- Isolated child adds only the fixed Functions-vendored dependency directory
+  after OS limits; a real-parser clean-interpreter fixture proves packaged
+  dependency discovery without inheriting worker Python paths or credentials.
+- Default backend-root suite: Linux CPython 3.13.18 **130 passed, 1 skipped**;
+  macOS CPython 3.13.9 **125 passed, 6 skipped**. All ten original critical
+  mutations remain rejected. GitHub PR uses a non-closing #9 reference;
+  parent reviews/merges serially. Real host/Azure/concurrency/fidelity gates
+  remain explicitly unverified.

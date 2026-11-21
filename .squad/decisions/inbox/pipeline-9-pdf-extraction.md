@@ -60,3 +60,28 @@ dispatch remains #13; source hashes, temporary persistence, deletion and quotas
 remain their assigned issues. Real Functions-host/Azure OS-limit behavior,
 concurrency headroom and real-document reading fidelity/performance are not
 verified or claimed. See `docs/pdf-extraction.md` and the committed handoff.
+
+### 2026-11-21: User-directed self-contained PR integration
+
+**By:** pipeline, coordinator-authorized scope extension after bootstrap PR #49.
+
+**What:** Merged `origin/main` at `22258947c0fb0e6ed98b2866b94511492db6cbee`.
+Resolved the stale #21 backlog row using main's accepted canonical state; no
+other-member/canonical delta remains in the issue PR. Root `requirements.txt`
+now includes `extraction/requirements.txt`, and root pytest discovery includes
+`extraction/tests`, preserving existing foundation/storage includes.
+
+All current PDF tests/docs use the deployed `backend/` module root and
+`extraction` imports, not a second `backend.extraction` package identity.
+The isolated parser supports the fixed deployment-owned
+`.python_packages/lib/site-packages` directory after installing OS limits;
+no inherited Python path or secret environment is introduced. A clean
+interpreter fixture exercises the actual parser from that Functions packaging
+layout without a globally installed parser.
+
+**Why:** The user requested GitHub PR/serial-main integration, and the
+coordinator explicitly released these root tooling paths to #9 so the PR is
+self-contained. The default backend-root suite now verifies the integration:
+Linux CPython 3.13.18 **130 passed / 1 skipped**; macOS CPython 3.13.9
+**125 passed / 6 skipped**. All original ten weakened contract copies are still
+rejected. Real Functions-host/Azure and fidelity/concurrency gates remain open.

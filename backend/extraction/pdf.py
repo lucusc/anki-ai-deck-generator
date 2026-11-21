@@ -307,6 +307,11 @@ def _worker_main() -> None:
         result = PdfExtraction(PdfOutcome.ISOLATION_UNAVAILABLE, reason="os_limits")
     else:
         try:
+            # Functions deployments vendor dependencies here; isolated mode ignores
+            # worker-added PYTHONPATH. Only this fixed deployment-owned path is added.
+            packages = Path(__file__).resolve().parents[1] / ".python_packages/lib/site-packages"
+            if packages.is_dir():
+                sys.path.insert(0, str(packages))
             data = sys.stdin.buffer.read(limits.max_input_bytes + 1)
             if len(data) > limits.max_input_bytes:
                 result = PdfExtraction(PdfOutcome.RESOURCE_LIMIT, reason="input_bytes")

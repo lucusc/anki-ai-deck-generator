@@ -5,8 +5,8 @@ import time
 
 import pytest
 
-from backend.extraction import PdfLimits, PdfOutcome, extract_pdf
-from backend.extraction.pdf import _parse_pdf
+from extraction import PdfLimits, PdfOutcome, extract_pdf
+from extraction.pdf import _parse_pdf
 from fixtures import STUDY_TEXT, make_pdf, text_stream
 
 
@@ -162,7 +162,7 @@ def test_aes_encryption_identified_without_optional_crypto_provider(tmp_path, mo
     import sysconfig
     import venv
     import pypdf
-    from backend.extraction import pdf
+    from extraction import pdf
 
     # Construct genuine AES bytes with the test-only provider, but deliberately
     # launch the actual parser in a clean venv containing only the runtime dependency.
@@ -176,6 +176,40 @@ def test_aes_encryption_identified_without_optional_crypto_provider(tmp_path, mo
     assert result.outcome == PdfOutcome.ENCRYPTED
     assert result.reason == "password_protected"
     assert result.pages == ()
+
+
+@LINUX
+def test_isolated_parser_loads_functions_packaged_dependency_directory(tmp_path):
+    import json
+    from pathlib import Path
+    import shutil
+    import subprocess
+    import venv
+    import pypdf
+    from extraction import pdf
+
+    environment = tmp_path / "clean-python"
+    venv.EnvBuilder(with_pip=False, symlinks=True).create(environment)
+    app = tmp_path / "function-app"
+    parser = app / "extraction" / "pdf.py"
+    parser.parent.mkdir(parents=True)
+    shutil.copyfile(pdf.__file__, parser)
+    packages = app / ".python_packages" / "lib" / "site-packages"
+    shutil.copytree(Path(pypdf.__file__).parent, packages / "pypdf")
+    completed = subprocess.run(
+        [str(environment / "bin" / "python"), "-I", "-B", str(parser),
+         json.dumps(vars(PdfLimits()))],
+        input=make_pdf(STUDY_TEXT),
+        capture_output=True,
+        timeout=15,
+        env={},
+        check=True,
+    )
+    result = json.loads(completed.stdout)
+    assert result["outcome"] == "ok"
+    assert result["pages"][0]["page_number"] == 1
+    assert result["pages"][0]["text"] == STUDY_TEXT
+    assert completed.stderr == b""
 
 
 def test_external_image_decoder_is_disabled_even_if_configured():

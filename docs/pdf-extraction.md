@@ -20,16 +20,18 @@ an external rendering/OCR executable is used. License sources were checked on
 2026-11-21. The test-only cryptography dependency generates original AES fixtures;
 runtime PDF extraction does not need it.
 
-The parent must reconcile the scoped dependency include into the backend
-manifest before packaging. No root/backend-root manifest was changed.
+The backend manifest includes the scoped runtime dependencies, and its default
+test runner includes `extraction/tests`. Root tooling changes were explicitly
+authorized for the self-contained #9 PR after the bootstrap merged.
 
 ## Proposed local contract
 
-From repository root, import `backend.extraction`; from the Functions app's
-`backend/` directory, import `extraction`:
+Use the Functions app's **`backend/` module root** and import `extraction`,
+matching the foundation's `auth` and `storage` namespaces. Do not load the same
+files again as `backend.extraction` or `backend.auth`:
 
 ```python
-from backend.extraction import PdfOutcome, extract_pdf
+from extraction import PdfOutcome, extract_pdf
 
 result = extract_pdf(pdf_bytes)
 if result.outcome == PdfOutcome.OK:
@@ -114,6 +116,11 @@ importing pypdf or reading input, the child sets hard `RLIMIT_AS`, soft/hard
 kills/reaps a timed-out child. There is no shell invocation, inherited environment,
 source-bearing diagnostic forwarding or parser output file. Bytecode writes
 are disabled. These are resource limits, not a filesystem/network security sandbox.
+After installing OS limits, the isolated child also recognizes the fixed
+deployment-owned `backend/.python_packages/lib/site-packages` directory used by
+Functions packaging. It does not inherit environment-controlled Python paths
+or credentials. A real-parser fixture verifies this layout in a clean
+interpreter with no globally installed parser.
 
 | Default | Unit / enforcement |
 | --- | --- |
@@ -171,12 +178,19 @@ used. The large expansion and repeated-Form fixtures are intentionally hostile
 synthetic documents, not production performance benchmarks.
 
 ```sh
-python3.13 -m venv backend/extraction/.venv
-backend/extraction/.venv/bin/python -m pip install -r backend/extraction/requirements-dev.txt
-backend/extraction/.venv/bin/python -B -m pytest -o addopts= -q backend/extraction/tests
+cd backend
+python3.13 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -B -m pytest
 ```
 
-On Linux these tests invoke the public process-isolated extractor with the real
+This runs the complete backend suite, including extraction. Use
+`.venv/bin/python -B -m pytest extraction/tests` for just this slice.
+The existing authentication dependency supplies crypto for the AES fixtures;
+the scoped extraction development manifest additionally pins it for standalone
+fixture environments.
+
+On Linux extraction tests invoke the public process-isolated extractor with the real
 parser, including actual CPU exhaustion, wall timeout, compressed-memory
 exhaustion, built-in decompression limits, and post-failure recovery.
 On macOS only trusted synthetic fixtures call the internal parser; Linux-only
