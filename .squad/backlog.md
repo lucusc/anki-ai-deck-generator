@@ -45,7 +45,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #1 | Create Anki add-on project structure | None | addon | 0 | accepted offline; desktop/provider smoke pending | released; `0c0ce0a`, `a13c5c4` |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
 | #3 | Implement deck selector | #1 | addon | 1 | accepted offline; real desktop smoke pending | released; `acf2549`, `160605a` |
-| #4 | Implement audience selector | #1 | addon | 1 | assigned | Audience selector; identity appended before execution |
+| #4 | Implement audience selector | #1 | addon | 1 | assigned | `0666d3c9-abeb-46d7-a87a-ae473ba07d5e`; initial `lucusc-super-telegram` |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
@@ -66,7 +66,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #22 | Create concept hash generation | #17 | pipeline | 6 | blocked | unclaimed |
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
-| #25 | Create note model mapper | #1, #3 | addon | 2 | assigned | Note model mapper; identity appended before execution |
+| #25 | Create note model mapper | #1, #3 | addon | 2 | assigned | `6aee107a-063e-41f5-b872-4a39b748c2a7`; initial `lucusc-silver-couscous` |
 | #26 | Support Basic notes | #25 | addon | 3 | blocked | unclaimed |
 | #27 | Support Reverse notes | #25 | addon | 3 | blocked | unclaimed |
 | #28 | Support Cloze notes | #25 | addon | 3 | blocked | unclaimed |
