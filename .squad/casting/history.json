@@ -1,0 +1,89 @@
+{
+  "universe_usage_history": [
+    {
+      "universe": "preset:default",
+      "used_at": "2026-11-21T02:30:15.220Z"
+    },
+    {
+      "universe": "cli-cast",
+      "used_at": "2026-11-21T02:31:29.484Z"
+    },
+    {
+      "universe": "cli-cast",
+      "used_at": "2026-11-21T02:31:30.241Z"
+    },
+    {
+      "universe": "cli-cast",
+      "used_at": "2026-11-21T02:31:31.009Z"
+    },
+    {
+      "universe": "cli-cast",
+      "used_at": "2026-11-21T02:31:31.777Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "preset-preset:default-revision-2-2026-11-21T02:30:15.220Z": {
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "agents": [
+        "lead",
+        "reviewer",
+        "devrel",
+        "security",
+        "docs"
+      ],
+      "universe": "preset:default"
+    },
+    "cli-cast-r3-2026-11-21T02:31:29.484Z": {
+      "created_at": "2026-11-21T02:31:29.484Z",
+      "agents": [
+        "functions"
+      ],
+      "universe": "cli-cast"
+    },
+    "cli-cast-r4-2026-11-21T02:31:30.241Z": {
+      "created_at": "2026-11-21T02:31:30.241Z",
+      "agents": [
+        "addon"
+      ],
+      "universe": "cli-cast"
+    },
+    "cli-cast-r5-2026-11-21T02:31:31.009Z": {
+      "created_at": "2026-11-21T02:31:31.009Z",
+      "agents": [
+        "pipeline"
+      ],
+      "universe": "cli-cast"
+    },
+    "cli-cast-r6-2026-11-21T02:31:31.777Z": {
+      "created_at": "2026-11-21T02:31:31.777Z",
+      "agents": [
+        "tester"
+      ],
+      "universe": "cli-cast"
+    },
+    "repo-team-r7": {
+      "created_at": "2026-11-21T02:34:13.850Z",
+      "agents": [
+        "lead",
+        "functions",
+        "addon",
+        "pipeline",
+        "tester"
+      ],
+      "universe": "repo-team"
+    },
+    "repo-team-r8": {
+      "created_at": "2026-11-21T02:34:39.646Z",
+      "agents": [
+        "lead",
+        "functions",
+        "addon",
+        "pipeline",
+        "tester"
+      ],
+      "universe": "repo-team"
+    }
+  },
+  "transaction_id": "2ad94d9e-6e23-422d-82a3-7a98d2bf28a7",
+  "registry_revision": 8
+}

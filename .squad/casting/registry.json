@@ -1,0 +1,94 @@
+{
+  "schema": "squad-agent-provenance/v1",
+  "schema_version": 1,
+  "revision": 8,
+  "generated_at": "2026-11-21T02:34:39.646Z",
+  "agents": {
+    "lead": {
+      "display_name": "lead",
+      "persistent_name": "lead",
+      "role": "lead",
+      "universe": "preset:default",
+      "status": "active",
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "updated_at": "2026-11-21T02:34:39.646Z"
+    },
+    "reviewer": {
+      "display_name": "reviewer",
+      "persistent_name": "reviewer",
+      "role": "reviewer",
+      "universe": "preset:default",
+      "status": "retired",
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "updated_at": "2026-11-21T02:34:13.850Z",
+      "retired_at": "2026-11-21T02:34:13.850Z"
+    },
+    "devrel": {
+      "display_name": "devrel",
+      "persistent_name": "devrel",
+      "role": "devrel",
+      "universe": "preset:default",
+      "status": "retired",
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "updated_at": "2026-11-21T02:34:13.850Z",
+      "retired_at": "2026-11-21T02:34:13.850Z"
+    },
+    "security": {
+      "display_name": "security",
+      "persistent_name": "security",
+      "role": "security",
+      "universe": "preset:default",
+      "status": "retired",
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "updated_at": "2026-11-21T02:34:13.850Z",
+      "retired_at": "2026-11-21T02:34:13.850Z"
+    },
+    "docs": {
+      "display_name": "docs",
+      "persistent_name": "docs",
+      "role": "docs",
+      "universe": "preset:default",
+      "status": "retired",
+      "created_at": "2026-11-21T02:30:15.220Z",
+      "updated_at": "2026-11-21T02:34:13.850Z",
+      "retired_at": "2026-11-21T02:34:13.850Z"
+    },
+    "functions": {
+      "display_name": "functions",
+      "persistent_name": "functions",
+      "role": "Backend Developer",
+      "universe": "cli-cast",
+      "status": "active",
+      "created_at": "2026-11-21T02:31:29.484Z",
+      "updated_at": "2026-11-21T02:34:39.646Z"
+    },
+    "addon": {
+      "display_name": "addon",
+      "persistent_name": "addon",
+      "role": "Python Anki Add-on",
+      "universe": "cli-cast",
+      "status": "active",
+      "created_at": "2026-11-21T02:31:30.241Z",
+      "updated_at": "2026-11-21T02:34:39.646Z"
+    },
+    "pipeline": {
+      "display_name": "pipeline",
+      "persistent_name": "pipeline",
+      "role": "Extraction / Generation",
+      "universe": "cli-cast",
+      "status": "active",
+      "created_at": "2026-11-21T02:31:31.009Z",
+      "updated_at": "2026-11-21T02:34:39.646Z"
+    },
+    "tester": {
+      "display_name": "tester",
+      "persistent_name": "tester",
+      "role": "Test Engineer",
+      "universe": "cli-cast",
+      "status": "active",
+      "created_at": "2026-11-21T02:31:31.777Z",
+      "updated_at": "2026-11-21T02:34:39.646Z"
+    }
+  },
+  "transaction_id": "2ad94d9e-6e23-422d-82a3-7a98d2bf28a7"
+}
