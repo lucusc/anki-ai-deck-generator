@@ -60,6 +60,18 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Independent reversed visibility revision
+
+**Owner:** parent coordinator / lead; revision author tester. Review of
+`6e08544` passed the existing 97 add-on tests on real core 26.9.4 but public
+probes accepted default-ignorable-only questions outside category C. This
+artifact is blocked, not merged. Tester owns the narrow reversed-module
+visibility correction; the original addon author is locked out this revision
+cycle and cannot revise or advise. Preserve meaningful Unicode content and
+Basic behavior; no generic Unicode quality/spoofing system is authorized.
+See the tester issue-27 ownership log. Full Qt/review/caller/ack acceptance
+remains open regardless of the correction's core test results.
+
 ### 2026-11-21 — TXT/Markdown accepted and Basic helper integrated
 
 **Owner:** parent coordinator / lead. PR #60 merged as `bc8d0a8`; #12 is
