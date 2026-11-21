@@ -53,7 +53,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | native component merged; Azure release smoke pending | released; PR #53, merge `4c08838`; license-compatible pypdf |
 | #10 | Support DOCX extraction | #6 | pipeline | 1 | ready | unclaimed |
 | #11 | Support PowerPoint extraction | #6 | pipeline | 1 | ready | unclaimed |
-| #12 | Support Markdown extraction | #6 | pipeline | 1 | assigned | UTF-8 TXT/Markdown extraction; identity appended before execution |
+| #12 | Support Markdown extraction | #6 | pipeline | 1 | assigned | `6236e88c-4de5-48ad-ab7a-15b991e72afa`; `lucusc-upgraded-fishstick`; Auto Balance |
 | #13 | Implement OCR fallback path | #9, #18, #32 | pipeline | 2 | blocked | unclaimed |
 | #14 | Create subject detection workflow | #9, #12 | pipeline | 2 | blocked | unclaimed |
 | #15 | Implement card-type classification | #14 | pipeline | 3 | blocked | unclaimed |
@@ -67,7 +67,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
 | #25 | Create note model mapper | #1, #3 | addon | 2 | mapper merged/offline-verified; real persistence/render integration pending | released; PR #52, merge `6ac7669` |
-| #26 | Support Basic notes | #25 | addon | 3 | assigned | Approved Basic import; identity appended before execution |
+| #26 | Support Basic notes | #25 | addon | 3 | assigned | `4504581f-4e6a-4fc7-bed0-ef6bc397be85`; `lucusc-stunning-couscous`; Fusion High |
 | #27 | Support Reverse notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
 | #28 | Support Cloze notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
 | #29 | Support custom tags | #25 | addon | 3 | ready | unclaimed |
