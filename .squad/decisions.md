@@ -60,6 +60,25 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — Accepted #1 foundation, desktop evidence still open
+
+**Owner:** parent coordinator / lead. Reviewed and integrated #1 as `0c0ce0a`,
+handoff `a13c5c4`; coordinator reran all 31 add-on tests and 34 backend tests.
+Accept Qt6 desktop 25.09 and 26.09.4 as compatibility targets, not demonstrated
+real-desktop support. Actual Anki restart/Qt, native credential-store round
+trips and approved-provider consent/refresh/revocation remain release gates.
+
+Accepted public config is issuer/client_id/audience/scopes. Browser sign-in
+requires exact-issuer OIDC discovery, S256 and a native-client ephemeral IPv4
+loopback redirect. Refresh credentials use native protected OS stores and
+profile/deployment-specific accounts; access tokens stay in memory. Windows
+refresh blobs have an explicit 2560-byte limit. Provider compatibility must be
+verified against the accepted RS256 API boundary before production use.
+
+#3 owns deck models/services/widget, the existing Tools/sign-in UI wiring and
+its related tests. #4 waits for that shared UI write ownership to be released;
+this is serialization of files, not a new graph prerequisite.
+
 ### 2026-11-21 — Accepted #6 foundation, not production deployment
 
 **Owner:** parent coordinator / lead. Reviewed and integrated #6 as `032393e`

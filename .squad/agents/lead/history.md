@@ -7,6 +7,11 @@
 
 ## Learnings
 
+- 2026-11-21: Accepted #1 implementation offline as `0c0ce0a`/`a13c5c4`;
+  coordinator reran 31 add-on and 34 backend tests. Desktop, native-store and
+  provider evidence remains open. Serialize #3/#4 shared UI wiring while #9
+  extraction and #21 storage continue in disjoint backend scopes.
+
 - 2026-11-21: Accepted #6 implementation as `032393e` with handoff `9f7311f`;
   reviewed authenticated route/queue boundary and reran 34 backend tests in the
   coordinator checkout. Real Functions host/cloud/provider smoke remains open.

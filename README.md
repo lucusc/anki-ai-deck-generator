@@ -10,7 +10,7 @@ Generate reviewable Anki notes from PDF, DOCX, PPTX, Markdown, and text study ma
 - Native document parsing first; metered OCR only when needed.
 - Asynchronous processing, bounded AI usage, and infrastructure that scales down when idle.
 
-This repository contains requirements, Squad coordination, and an initial backend foundation. The end-to-end application is not yet implemented.
+This repository contains requirements, Squad coordination, and initial Anki add-on and backend foundations. The end-to-end application is not yet implemented.
 
 ## Documentation
 
@@ -18,6 +18,7 @@ This repository contains requirements, Squad coordination, and an initial backen
 - [Architecture](docs/architecture.md)
 - [Roadmap](docs/roadmap.md)
 - [Backend development](docs/backend-development.md)
+- [Anki add-on development](docs/addon-development.md)
 - [Implementation issues](https://github.com/lucusc/anki-ai-deck-generator/issues)
 
 ## Architecture
@@ -34,7 +35,7 @@ Designed for 1-5 users and a few documents per week. Actual Azure cost depends o
 
 ## Development
 
-See [backend development](docs/backend-development.md) for offline tests and the optional local Functions host. Remaining implementation, Anki compatibility, and deployment instructions follow the backlog. Use synthetic or openly licensed fixtures only. Do not commit credentials, private study materials, or student information.
+See [backend development](docs/backend-development.md) for offline tests and the optional local Functions host, and [add-on development](docs/addon-development.md) for packaging, browser sign-in, and the unverified desktop/provider smoke matrix. Remaining implementation and deployment instructions follow the backlog. Use synthetic or openly licensed fixtures only. Do not commit credentials, private study materials, or student information.
 
 ## Squad development coordination
 

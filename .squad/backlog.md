@@ -4,7 +4,9 @@ Canonical Squad offline backlog (`templates/prd-intake.md`); requirements remain
 the live [GitHub issues](https://github.com/lucusc/anki-ai-deck-generator/issues).
 Snapshot: 2026-11-21 UTC, all 48 issues open; all acceptance criteria and appended
 OAuth/temporary-retention requirements reviewed. #6 implementation is integrated
-and offline-verified; real Functions host/cloud smoke remains pending. #1 is active.
+and offline-verified; real Functions host/cloud smoke remains pending. #1 is
+integrated and offline-verified; actual Anki/OS-store/provider smoke remains
+pending. Neither foundation is production-certified or closed on GitHub.
 
 ## Dependency-ready V1 waves
 
@@ -40,10 +42,10 @@ on the listed prerequisites; completion requires the full issue acceptance.
 
 | Issue | Title | Direct prerequisites | Route | Wave | State | Active claim |
 |-------|-------|----------------------|-------|------|-------|--------------|
-| #1 | Create Anki add-on project structure | None | addon | 0 | assigned | `27cf3989-5ddb-4f18-a18a-dda7b5b51687`; `lucusc-anki-addon-foundation` |
+| #1 | Create Anki add-on project structure | None | addon | 0 | accepted offline; desktop/provider smoke pending | released; `0c0ce0a`, `a13c5c4` |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
-| #3 | Implement deck selector | #1 | addon | 1 | blocked | unclaimed |
-| #4 | Implement audience selector | #1 | addon | 1 | blocked | unclaimed |
+| #3 | Implement deck selector | #1 | addon | 1 | assigned | Deck selector; identity appended before execution |
+| #4 | Implement audience selector | #1 | addon | 1 | ready | unclaimed; serialize shared UI wiring after #3 |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
