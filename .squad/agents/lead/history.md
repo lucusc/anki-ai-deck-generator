@@ -7,6 +7,15 @@
 
 ## Learnings
 
+- 2026-11-21: PR #55 reviewed/merged at `ef9ffe5`; 192 combined backend tests
+  passed with six existing Linux-only skips. Unknown initialization settlement
+  and real Azure/host/deadline recovery still gate #18/#21 and dependent APIs.
+  PR #51 patched PyJWT to 2.15.0; pytest 9.0.3 also passed the combined suite.
+  The forge's 33 alert rows represented 17 distinct advisories, not 33 distinct
+  application vulnerabilities. #12/#26 now have exact persisted child identities.
+  Retain Anki logical-ID targeting with a documented indistinguishable-recreation
+  limitation; do not invent a supported incarnation guarantee.
+
 - 2026-11-21: PR #52 merged as `6ac7669` after 70 add-on/100 backend tests;
   mapper persistence/render integration remains open. PR #53 merged as
   `4c08838` after disposable-checkout PDF review and 148 backend tests on macOS
