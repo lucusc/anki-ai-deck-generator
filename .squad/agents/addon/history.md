@@ -50,6 +50,31 @@
 - Contract proposal: addon-3-stable-deck-contract.md; docs/deck-selector.md records
   API evidence and honest desktop/provider/undo gaps. Parent owns reconciliation.
 
+### 2026-11-21 — Issue #25 note model mapper
+
+- Own checkout/TEAM_ROOT, STATE_BACKEND=local; required parent identity integrated
+  as 047a559. App-renamed branch lucusc-note-model-mapper. Per revised user PR
+  workflow, merged origin/main bootstrap 2225894 before publication.
+- Implementation c1ce981 defines strict schema_version=1 generated notes and
+  dedicated Basic/reversed/Cloze managed models, preserving customized built-ins
+  and failing on incompatible managed field/template/CSS/deck overrides.
+- Sanitizer must account for Anki non-HTML syntax too: generated LaTeX/sound
+  markers fail; source/provenance escape brackets/braces as well as HTML.
+  Cloze accepts documented c1-c99 nonnested tokens after entity decoding.
+- Return unsaved note, revalidated numeric deck identity and optional model
+  changes. Creation defaults off, explicit boolean only; no insertion, flush,
+  approval, dedupe lookup or acknowledgement. Identity lives in Import ID field,
+  becoming durable only when later approved insertion commits it.
+- 16 focused tests and all 61 add-on tests pass. Source mutations protect
+  identity, attribute stripping and model customization gates. Packaging
+  includes all mapper modules and excludes tests.
+- docs/note-payload.md and addon-25-note-payload-v1.md are a producer contract
+  proposal for parent/lead acceptance, not an implemented generation endpoint.
+  Anki 25.09/26.09.4 public APIs inspected; real desktop saved rendering/browser
+  views/restart/undo/persistence/Qt and backend/import integration remain open.
+- Post-publication parent main sync: audience PR #50 main 04e139a merged as
+  d416f46, preserving both histories. All 70 integrated add-on tests pass;
+  PR #52 retains non-closing wording and unchanged acceptance gaps.
 ### 2026-11-21 — Issue #4 audience selector
 
 - Own checkout/TEAM_ROOT with STATE_BACKEND=local; dispatch identity 53116c8
