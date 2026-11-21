@@ -79,6 +79,11 @@ never mutate the main checkout directly.
 Use closing issue references only when every acceptance criterion is satisfied.
 Merging useful foundation code does not close missing desktop/cloud/retention
 verification. Keep those issues open and linked with non-closing references.
+Before merging, inspect the PR's live `closingIssuesReferences`. GitHub can
+recognize a closing verb followed by an issue number even inside a negated
+sentence. For incomplete work use only non-closing links; do not negate a
+closing keyword adjacent to an issue reference. Correct accidental auto-closure
+caused by this workflow while preserving any independent user closure decision.
 This explicit PR workflow does not authorize deployment, paid services,
 watchers, generated automation, or unattended Agent merge.
 

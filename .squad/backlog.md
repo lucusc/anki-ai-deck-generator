@@ -45,15 +45,15 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #1 | Create Anki add-on project structure | None | addon | 0 | accepted offline; desktop/provider smoke pending | released; `0c0ce0a`, `a13c5c4` |
 | #2 | Build file upload interface | #1, #7 | addon | 3 | blocked | unclaimed |
 | #3 | Implement deck selector | #1 | addon | 1 | accepted offline; real desktop smoke pending | released; `acf2549`, `160605a` |
-| #4 | Implement audience selector | #1 | addon | 1 | assigned | `0666d3c9-abeb-46d7-a87a-ae473ba07d5e`; initial `lucusc-super-telegram` |
+| #4 | Implement audience selector | #1 | addon | 1 | UI/contract merged; job/review integration pending | released; PR #50, merge `04e139a`; issue remains open |
 | #5 | Create review summary screen | #2, #8, #25 | addon | 7 | blocked | unclaimed |
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
 | #8 | Implement card generation endpoint | #7, #9, #16, #17 | functions | 6 | blocked | unclaimed |
-| #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | assigned | `98b8c5f4-5b32-4a3a-84dc-4ba470a7be4f`; initial `lucusc-super-adventure` |
+| #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | native component merged; Azure release smoke pending | released; PR #53, merge `4c08838`; license-compatible pypdf |
 | #10 | Support DOCX extraction | #6 | pipeline | 1 | ready | unclaimed |
 | #11 | Support PowerPoint extraction | #6 | pipeline | 1 | ready | unclaimed |
-| #12 | Support Markdown extraction | #6 | pipeline | 1 | ready | unclaimed |
+| #12 | Support Markdown extraction | #6 | pipeline | 1 | assigned | UTF-8 TXT/Markdown extraction; identity appended before execution |
 | #13 | Implement OCR fallback path | #9, #18, #32 | pipeline | 2 | blocked | unclaimed |
 | #14 | Create subject detection workflow | #9, #12 | pipeline | 2 | blocked | unclaimed |
 | #15 | Implement card-type classification | #14 | pipeline | 3 | blocked | unclaimed |
@@ -66,12 +66,12 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #22 | Create concept hash generation | #17 | pipeline | 6 | blocked | unclaimed |
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
-| #25 | Create note model mapper | #1, #3 | addon | 2 | assigned | `6aee107a-063e-41f5-b872-4a39b748c2a7`; initial `lucusc-silver-couscous` |
-| #26 | Support Basic notes | #25 | addon | 3 | blocked | unclaimed |
-| #27 | Support Reverse notes | #25 | addon | 3 | blocked | unclaimed |
-| #28 | Support Cloze notes | #25 | addon | 3 | blocked | unclaimed |
-| #29 | Support custom tags | #25 | addon | 3 | blocked | unclaimed |
-| #30 | Store source metadata in notes | #25 | addon | 3 | blocked | unclaimed |
+| #25 | Create note model mapper | #1, #3 | addon | 2 | mapper merged/offline-verified; real persistence/render integration pending | released; PR #52, merge `6ac7669` |
+| #26 | Support Basic notes | #25 | addon | 3 | assigned | Approved Basic import; identity appended before execution |
+| #27 | Support Reverse notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
+| #28 | Support Cloze notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
+| #29 | Support custom tags | #25 | addon | 3 | ready | unclaimed |
+| #30 | Store source metadata in notes | #25 | addon | 3 | ready | unclaimed |
 | #31 | Add Application Insights integration | #6 | functions | 1 | ready | unclaimed |
 | #32 | Track generation cost estimates | #6 | functions | 1 | ready | unclaimed |
 | #33 | Track generation duration | #31 | functions | 2 | blocked | unclaimed |
