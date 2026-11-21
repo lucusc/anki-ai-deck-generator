@@ -96,3 +96,24 @@
 - docs/audience-settings.md and addon-4-audience-settings.md describe the exact
   #7 validator caller, #8 persisted snapshot and #5 review label obligations.
   Parent owns full schema/state acceptance and serial PR review/merge.
+
+### 2026-11-21 — Issue #26 approved Basic import
+
+- Branch lucusc-stunning-couscous, own TEAM_ROOT and STATE_BACKEND=local;
+  integrated parent dispatch cda15d9 before edits. Capture the normal numeric
+  deck target bound to its originating collection; explicit boolean approval
+  and Basic family are required before collection writes.
+- Reuse #25 mapper/formatting and public `Collection.add_note`; return saved
+  note ID and merged change notifications. Model creation is optional and its
+  separate write can persist if note insertion fails. No duplicate/ack/UI work.
+- Real Anki 25.9 and 26.9.4 core temporary collections verify saved rendering
+  after close/reopen, not Qt or application restart. A 25.9 same-millisecond
+  deleted/recreated deck reused its numeric ID and identical public deck data;
+  both cores deterministically restore identical public data via the sync/merge
+  API. The accepted ID-only contract cannot distinguish either case, and
+  desktop UI timing and likelihood have not been measured.
+- Coordinator accepted logical numeric-ID targeting, explicitly not an
+  incarnation guarantee; existing-deck imports remain enabled. The contract is
+  recorded in addon-26-basic-import-contract.md. Remaining release gaps include
+  Qt/profile/undo verification and later review, duplicate-safe retry and
+  acknowledgement integration.
