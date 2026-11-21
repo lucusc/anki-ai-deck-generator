@@ -73,3 +73,13 @@
   limits, heading/reference behavior, invalid UTF-8, empties and inert content.
   Focused text tests, the extraction suite and the full backend suite passed on
   macOS CPython 3.13; no Azure, Anki, worker or generation integration was run.
+
+### 2026-11-21 - Markdown heading edge-case follow-up
+
+- Closing-only ATX hashes now produce an empty heading title. A consumed
+  Setext underline is excluded from subsequent heading recognition, so
+  `Title\n---\n---` retains the second separator as literal body text.
+- Regressions exercise the actual parser and prove the exact output-character
+  boundary remains inclusive. After syncing the updated `origin/main`, all 29
+  focused text cases and the complete backend suite passed on macOS CPython
+  3.13; no CommonMark renderer or broader syntax support was added.
