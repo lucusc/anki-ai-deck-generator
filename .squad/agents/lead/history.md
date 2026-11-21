@@ -7,6 +7,17 @@
 
 ## Learnings
 
+- 2026-11-21: PR #52 merged as `6ac7669` after 70 add-on/100 backend tests;
+  mapper persistence/render integration remains open. PR #53 merged as
+  `4c08838` after disposable-checkout PDF review and 148 backend tests on macOS
+  (six Linux skips), plus recorded child Linux evidence. New #12 session uses
+  Auto Balance; #26 uses Fusion High per the user's clarified routing choice.
+
+- 2026-11-21: Bootstrap PR #49 merged at `2225894`; audience PR #50 reviewed
+  and merged at `04e139a` after 54 add-on/100 backend tests. #4 remains open for
+  job/review caller integration. GitHub closing links must be checked directly:
+  negated closing wording still auto-linked and required reopening #4.
+
 - 2026-11-21: Reviewed #3 and integrated `acf2549`/`160605a`; all 45 add-on
   tests pass. Accepted immutable numeric deck identity with explicit revalidation.
   #4 UI and #25 isolated note-mapping modules can now proceed in parallel.

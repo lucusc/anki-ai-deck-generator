@@ -3,8 +3,9 @@
 The #1 foundation provides a Tools menu entry, modeless browser sign-in, token
 refresh and local sign-out. The integrated [#3 deck selector](deck-selector.md)
 also lists normal decks and creates a deck only on explicit user action.
-It does **not** upload documents, select audiences, generate notes, or import
-notes. Those are separate issues.
+The integrated [audience selector](audience-settings.md) captures explicit
+settings, but submission/result/review call sites remain pending. It does
+**not** upload documents, generate notes, or import notes.
 Squad remains development tooling, not a runtime dependency.
 
 ## Desktop version targets and evidence

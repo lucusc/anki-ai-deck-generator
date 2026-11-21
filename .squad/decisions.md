@@ -60,6 +60,56 @@ logs, or telemetry. Paid OCR is explicitly enabled and bounded, never implicit.
 
 ## Governance
 
+### 2026-11-21 — New-session model routing
+
+**Owner:** parent coordinator / lead. The user requested Fusion routing for new
+subsessions and clarified that simpler tasks use Auto Balance, while complex
+tasks use Fusion High. Set new session kickoff `model=auto` with
+`auto_tier=balance` for straightforward bounded work or `auto_tier=hydrafusion`
+for complex implementation/verification. This does not change existing sessions
+or authorize paid external services. #12 uses Balance; #26 uses Fusion High.
+
+### 2026-11-21 — Accepted mapper and PDF component contracts
+
+**Owner:** parent coordinator / lead. Reviewed PR #52 and verified synchronized
+head `7293dd3`; 70 add-on/100 backend tests passed, then GitHub merge `6ac7669`.
+Accept schema_version 1 and basic/reversed/cloze mapper families, canonical
+import UUID, safe limited markup and isolated managed note models. Mapping
+returns an unsaved note and revalidated deck; no insertion/approval/ack is
+claimed. Real saved rendering/persistence and producer/import integration remain
+open. #26 owns the next approved Basic-only import helper and its real-core
+verification where available, not the future review screen.
+
+Reviewed PR #53 at `0f1af67`; disposable coordinator checkout verified 148
+backend tests with six Linux-only skips on macOS. Child evidence additionally
+records actual Linux bounded-parser tests. GitHub merge `4c08838`.
+Accept BSD-3-Clause pypdf 7.1.1 with preserved notice, PDF-local frozen outcomes,
+one-based ordered pages and documented thresholds/OS bounds. Non-Linux public
+parsing fails closed; the private encryption hook is pinned and upgrade-tested.
+Actual Azure OS-limit/concurrency and representative fidelity release checks
+remain open. Other formats must not execute source content or fabricate success
+for empty/invalid input.
+
+#12 owns only TXT/Markdown-specific extraction modules/tests and additive
+exports, with deterministic one-based source lines/sections and explicit
+empty/invalid UTF-8/resource outcomes. It does not change PDF heuristics or
+worker/Blob integration. #26 owns isolated Basic import/tests, not existing
+audience/deck UI or backend extraction/storage.
+
+### 2026-11-21 — Audience slice merged, caller integration still required
+
+**Owner:** parent coordinator / lead. Reviewed PR #50 and validated its exact
+head `fcd507d7a83651890397eb87e5114d061d8cd25e`; 54 add-on and 100 backend tests
+passed before merging through GitHub as `04e139a`. Accept frozen audience
+settings, strict client/server parity and current selector/profile lifecycle.
+#7 must call the server validator before acceptance/persistence/enqueue; #8
+must preserve the captured settings; #5 must display the accepted snapshot.
+These call sites and actual desktop smoke remain open, so #4 is not complete.
+
+GitHub interpreted negated closing wording in PR #50 as an automatic closing
+reference. The coordinator reopened #4 with an explanation. Future merges
+must inspect `closingIssuesReferences`, not rely on prose intent.
+
 ### 2026-11-21 — User-directed GitHub PR and main integration
 
 **Owner:** parent coordinator / lead. User direction:
