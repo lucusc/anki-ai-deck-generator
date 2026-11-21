@@ -24,6 +24,7 @@ This repository contains requirements, Squad coordination, and initial Anki add-
 - [Versioned note payload and mapper](docs/note-payload.md)
 - [Bounded native PDF extraction](docs/pdf-extraction.md)
 - [Table Storage contract and retention gaps](docs/table-storage.md)
+- [Private temporary Blob storage and recovery gates](docs/blob-storage.md)
 - [Implementation issues](https://github.com/lucusc/anki-ai-deck-generator/issues)
 
 ## Architecture
