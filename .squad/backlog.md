@@ -48,7 +48,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #6 | Create Azure Function project | None | functions | 0 | accepted offline; host/cloud smoke pending | released; `032393e`, `9f7311f` |
 | #7 | Implement document upload endpoint | #6, #18, #21 | functions | 2 | blocked | unclaimed |
 | #8 | Implement card generation endpoint | #7, #9, #16, #17 | functions | 6 | blocked | unclaimed |
-| #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | assigned | PDF extraction; identity appended before execution |
+| #9 | Support PDF extraction using PyMuPDF | #6 | pipeline | 1 | assigned | `98b8c5f4-5b32-4a3a-84dc-4ba470a7be4f`; initial `lucusc-super-adventure` |
 | #10 | Support DOCX extraction | #6 | pipeline | 1 | ready | unclaimed |
 | #11 | Support PowerPoint extraction | #6 | pipeline | 1 | ready | unclaimed |
 | #12 | Support Markdown extraction | #6 | pipeline | 1 | ready | unclaimed |
@@ -60,7 +60,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #18 | Implement Blob Storage integration | #6 | functions | 1 | ready | unclaimed; defer dispatch until #21 storage contract is reconciled |
 | #19 | Implement file hash tracking | #18, #21 | functions | 2 | blocked | unclaimed |
 | #20 | Prevent duplicate file processing | #19 | functions | 3 | blocked | unclaimed |
-| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | assigned | Table schema; identity appended before execution |
+| #21 | Implement Azure Table Storage schema | #6 | functions | 1 | assigned | `28606417-5782-4a37-a98b-72a5a835744a`; initial `lucusc-psychic-winner` |
 | #22 | Create concept hash generation | #17 | pipeline | 6 | blocked | unclaimed |
 | #23 | Implement duplicate card check | #21, #22 | functions | 7 | blocked | unclaimed |
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
