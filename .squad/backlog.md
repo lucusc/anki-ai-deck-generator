@@ -68,7 +68,7 @@ on the listed prerequisites; completion requires the full issue acceptance.
 | #24 | Skip duplicate card insertion | #23, #25 | addon | 8 | blocked | unclaimed |
 | #25 | Create note model mapper | #1, #3 | addon | 2 | mapper merged/offline-verified; real persistence/render integration pending | released; PR #52, merge `6ac7669` |
 | #26 | Support Basic notes | #25 | addon | 3 | core helper merged; user-facing integration open | released; PR #62, merge `e7d71d0`; logical-ID limitation accepted |
-| #27 | Support Reverse notes | #25 | addon | 3 | assigned | `d5047891-fb6a-4a71-89da-177af022d8fb`; `lucusc-special-disco`; Fusion High |
+| #27 | Support Reverse notes | #25 | addon | 3 | review blocked; independent visibility revision assigned | tester `0b89c5d3-85aa-4d2f-a1a9-ed9b9f6bb572`; `lucusc-reversed-visibility-revision`; Auto Balance; original addon author locked out for this revision |
 | #28 | Support Cloze notes | #25 | addon | 3 | ready | unclaimed; coordinate import-helper ownership after #26 |
 | #29 | Support custom tags | #25 | addon | 3 | ready | unclaimed |
 | #30 | Store source metadata in notes | #25 | addon | 3 | ready | unclaimed |
